@@ -1,0 +1,35 @@
+{
+  "name": "2048js",
+  "version": "1.0.0",
+  "description": "Goold old 2048 made with pure JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && babel src -d dist && minify dist -d dist && cp -r src/css dist && cp src/*.html dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tehSIRius/2048js.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "JS",
+    "Babel",
+    "2048"
+  ],
+  "author": "Patrik Dvořáček",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tehSIRius/2048js/issues"
+  },
+  "homepage": "https://github.com/tehSIRius/2048js#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-minify": "^0.5.1",
+    "babel-preset-minify": "^0.5.1",
+    "core-js": "^3.6.4",
+    "rimraf": "^3.0.2"
+  }
+}
