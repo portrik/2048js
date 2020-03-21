@@ -1,1 +1,1 @@
-'use strict';var _Game=require("./gamemodules/Game.js"),game=new _Game.Game;(function(){var a=document.getElementById("warning");a.parentNode.removeChild(a),game.setPlayArea(document.getElementById("game-area"))})();
+define(["./gamemodules/Game.js"],function(a){'use strict';var b=new a.Game;(function(){var a=document.getElementById("warning");a.parentNode.removeChild(a),b.setPlayArea(document.getElementById("game-area"))})()});
