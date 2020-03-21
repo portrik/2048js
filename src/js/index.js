@@ -1,8 +1,13 @@
 'use strict';
 
-class Tile {
-    constructor(value, size) {
-        this.value = value;
-        this.size = size;
-    }
-}
+import { Game } from './gamemodules/Game.js';
+
+const game = new Game();
+
+// Initializes Index page with the Game
+(function () {
+    let warning = document.getElementById('warning');
+    warning.parentNode.removeChild(warning);
+
+    game.setPlayArea(document.getElementById('game-area'));
+})();
