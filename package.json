@@ -5,7 +5,9 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && babel src -d dist && minify dist -d dist && cp -r src/css dist && cp src/*.html dist"
+    "build": "rimraf dist && babel src -d dist && minify dist -d dist && cp -r src/css dist && cp src/*.html dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
@@ -22,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/tehSIRius/2048js/issues"
   },
-  "homepage": "https://github.com/tehSIRius/2048js#readme",
+  "homepage": "http://tehSIRius.github.io/2048js",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
@@ -30,6 +32,7 @@
     "babel-minify": "^0.5.1",
     "babel-preset-minify": "^0.5.1",
     "core-js": "^3.6.4",
+    "gh-pages": "^2.2.0",
     "rimraf": "^3.0.2"
   }
 }
