@@ -1,1 +1,1 @@
-define(["exports"],function(a){"use strict";function b(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(a,"__esModule",{value:!0}),a.Tile=void 0;a.Tile=function a(c,d){b(this,a),this.value=c,this.color=d}});
+"use strict";System.register([],function(a){"use strict";function b(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}var c;return{setters:[],execute:function(){a("Tile",c=function a(c,d){b(this,a),this.value=c,this.color=d})}}});

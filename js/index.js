@@ -1,1 +1,1 @@
-define(["./gamemodules/Game.js"],function(a){'use strict';var b=new a.Game;(function(){var a=document.getElementById("warning");a.parentNode.removeChild(a),b.setPlayArea(document.getElementById("game-area"))})()});
+'use strict';System.register(["./gamemodules/Game.js"],function(){"use strict";var a,b;return{setters:[function(b){a=b.Game}],execute:function(){b=new a,function(){var a=document.getElementById("warning");a.parentNode.removeChild(a),b.setPlayArea(document.getElementById("game-area"))}()}}});
