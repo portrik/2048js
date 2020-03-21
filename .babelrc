@@ -1,4 +1,7 @@
 {
+  "plugins": [
+    "@babel/plugin-transform-modules-systemjs"
+  ],
   "presets": [
     [
       "@babel/env",
@@ -8,11 +11,11 @@
           "firefox": "60",
           "chrome": "67",
           "safari": "11.1",
-          "opera": "11.5"
+          "opera": "11.5",
+          "esmodules": true
         },
         "corejs": "3.6.4",
         "useBuiltIns": "usage",
-        "modules": "amd"
       }
     ]
   ]
