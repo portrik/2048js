@@ -25,7 +25,7 @@
     "url": "https://github.com/tehSIRius/2048js/issues"
   },
   "homepage": "http://tehSIRius.github.io/2048js",
-  "devDependencies": {
+  "dependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
