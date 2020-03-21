@@ -1,0 +1,1 @@
+'use strict';function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}var Tile=function a(b,c){_classCallCheck(this,a),this.value=b,this.size=c};
