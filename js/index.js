@@ -1,1 +1,1 @@
-'use strict';function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}var Tile=function a(b,c){_classCallCheck(this,a),this.value=b,this.size=c};
+'use strict';var _Game=require("./gamemodules/Game.js"),game=new _Game.Game;(function(){var a=document.getElementById("warning");a.parentNode.removeChild(a),game.setPlayArea(document.getElementById("game-area"))})();

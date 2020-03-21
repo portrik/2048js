@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.Tile=void 0;function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}var Tile=function a(b,c){_classCallCheck(this,a),this.value=b,this.color=c};exports.Tile=Tile;
