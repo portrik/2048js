@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  push:
+    branches: prod
+  
+jobs:
+  build:
+    name: Publish to Github Pages
+    
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run gh-pages deploy
+      run: npm run deploy
