@@ -9,7 +9,7 @@
     "html": "cp src/*.html dist",
     "static": "npm run css && npm run html",
     "build": "rimraf dist && webpack --mode production && npm run static",
-    "start": "npx http-server -o -c-1"
+    "start": "npx http-server ./src -o -c-1"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,8 @@
   "keywords": [
     "JavaScript",
     "JS",
-    "Babel",
-    "2048"
+    "2048",
+    "webpack"
   ],
   "author": "Patrik Dvořáček",
   "license": "MIT",

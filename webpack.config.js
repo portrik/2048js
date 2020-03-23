@@ -10,7 +10,17 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: [
-          { loader: 'babel-loader'}
+          {
+            loader: 'babel-loader',
+            options: {
+              "presets": [
+                ["@babel/preset-env", {
+                  "useBuiltIns": "entry",
+                  "targets": "> 0.25%, not dead"
+                }]
+              ]
+            }
+          }
         ]
       }
     ]
