@@ -1,7 +1,7 @@
 {
   "name": "2048js",
   "version": "1.0.0",
-  "description": "Goold old 2048 made with pure JavaScript",
+  "description": "Good old 2048 made with pure JavaScript",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
