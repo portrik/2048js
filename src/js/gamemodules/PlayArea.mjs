@@ -51,12 +51,13 @@ export class PlayArea {
         this.drawBoard();
     }
 
+    // TODO: Make margin of sides fixed value 
     drawBoard() {
         let tileSize = Math.round(this.width / (this.size + 1));
         let margin = Math.round(tileSize / (this.size + 1));
 
         let context = this.area.getContext('2d');
-        context.fillStyle = 'green';
+        context.fillStyle = 'rgba(238, 228, 218, 0.35)';
 
         let x = margin;
         let y = margin;
