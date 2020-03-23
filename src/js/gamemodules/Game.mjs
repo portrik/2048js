@@ -1,4 +1,4 @@
-import { PlayArea } from './PlayArea.js';
+import { PlayArea } from './PlayArea.mjs';
 
 export class Game {
     constructor() {

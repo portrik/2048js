@@ -1,4 +1,4 @@
-import { Tile } from './Tile.js';
+import { Tile } from './Tile.mjs';
 
 export class PlayArea {
     constructor(area) {
