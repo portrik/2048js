@@ -1,14 +1,14 @@
 {
   "name": "2048js",
   "version": "1.0.0",
-  "description": "Goold old 2048 made with pure JavaScript",
+  "description": "Good old 2048 made with pure JavaScript and Canvas",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "css": "cp -r src/css dist && npx csso ./dist/css/base.css --output ./dist/css/base.css",
-    "build": "rimraf dist && webpack --mode production && npm run css  && cp src/*.html dist",
-    "predeploy": "npm install && npm run build",
-    "deploy": "gh-pages -d dist",
+    "html": "cp src/*.html dist",
+    "static": "npm run css && npm run html",
+    "build": "rimraf dist && webpack --mode production && npm run static",
     "start": "npx http-server -o -c-1"
   },
   "repository": {
