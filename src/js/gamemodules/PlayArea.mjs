@@ -32,6 +32,8 @@ export class PlayArea {
         let context = this.area.getContext('2d');
         context.canvas.width = width;
         context.canvas.height = height;
+
+        this.drawBoard();
     }
 
     /**
