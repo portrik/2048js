@@ -22,5 +22,6 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           GIT_CONFIG_NAME: Patrik Dvořáček
           GIT_CONFIG_EMAIL: dvoracek.patrik@gmail.com
+          CLEAN: true
           BRANCH: gh-pages
           FOLDER: dist
