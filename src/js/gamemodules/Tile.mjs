@@ -3,4 +3,9 @@ export class Tile {
         this.value = value;
         this.color = color;
     }
+
+    merge(newColor) {
+        this.value *= 2;
+        this.color = newColor;
+    }
 }
