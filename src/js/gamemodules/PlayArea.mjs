@@ -48,6 +48,11 @@ export class PlayArea {
             this.board[i] = new Array(this.size);
         }
 
+        let x = Math.round(Math.random() * (this.size - 1));
+        let y = Math.round(Math.random() * (this.size - 1));
+
+        this.board[x][y] = new Tile(2, '#eee4da');
+
         this.drawBoard();
     }
 
@@ -57,14 +62,20 @@ export class PlayArea {
         let margin = Math.round(tileSize / (this.size + 1));
 
         let context = this.area.getContext('2d');
-        context.fillStyle = 'rgba(238, 228, 218, 0.35)';
 
         let x = margin;
         let y = margin;
 
         for (let j = 0; j < this.size; ++j) {
-
             for (let i = 0; i < this.size; ++i) {
+
+                if (this.board[j][i]) {
+                    context.fillStyle = this.board[j][i].color;
+                }
+                else {
+                    context.fillStyle = 'rgba(238, 228, 218, 0.35)';
+                }
+
                 context.fillRect(x, y, tileSize, tileSize);
                 x += tileSize + margin;
             }
@@ -72,5 +83,9 @@ export class PlayArea {
             x = margin;
             y += tileSize + margin;
         }
+    }
+
+    spawnTile() {
+        // TODO: Nice and clean code to generate new tiles
     }
 }
