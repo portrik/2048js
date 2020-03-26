@@ -9,7 +9,7 @@
     "html": "cp src/*.html dist",
     "static": "npm run css && npm run html",
     "build": "rimraf dist && webpack --mode production && npm run static",
-    "start": "npx http-server -o -c-1"
+    "start": "npx http-server ./src -o -c-1"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,8 @@
   "keywords": [
     "JavaScript",
     "JS",
-    "Babel",
-    "2048"
+    "2048",
+    "webpack"
   ],
   "author": "Patrik Dvořáček",
   "license": "MIT",
@@ -29,8 +29,8 @@
   "homepage": "http://tehSIRius.github.io/2048js",
   "dependencies": {
     "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
     "babel-loader": "^8.1.0",
+    "babel-preset-modern-browsers": "^12.0.0-beta.1",
     "csso-cli": "^3.0.0",
     "rimraf": "^3.0.2",
     "webpack": "^4.42.0",
