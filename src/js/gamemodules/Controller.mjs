@@ -24,7 +24,7 @@ export class Controller {
         this.touchY = 0;
 
         // Tolerance used for swipe directions
-        this.tolerance = 20;
+        this.tolerance = 50;
 
         this.targetElement = targetElement;
         this.enableController();
@@ -67,6 +67,8 @@ export class Controller {
      * @param event - touchStart event
      */
     handleTouchStart(event) {
+        event.preventDefault();
+
         this.touchX = Math.round(event.touches[0].screenX);
         this.touchY = Math.round(event.touches[0].screenY);
     }
