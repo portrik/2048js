@@ -2,8 +2,8 @@ import { Tile } from './Tile.mjs';
 
 export class PlayArea {
     constructor(area) {
+        this.chance = 0.2;
         this.area = area;
-        
         this.resizeArea();
 
         // Resizes the game area at every window resize
@@ -70,11 +70,12 @@ export class PlayArea {
                     context.fillStyle = this.board[j][i].color;
                     context.fillRect(x, y, tileSize, tileSize);
 
-                    context.font = '30px Arial';
+                    context.font = '80px Arial';
                     context.textAlign = 'center';
                     context.fillStyle = 'black';
+                    context.textBaseline = 'middle';
                     let textX = x + Math.round(tileSize / 2);
-                    let textY = y + Math.round(tileSize / 2);
+                    let textY = y + Math.round(tileSize / 2) + 10;
 
                     context.fillText(this.board[j][i].value, textX, textY);
                 }
@@ -107,10 +108,21 @@ export class PlayArea {
             let x = available_spaces[position][0];
             let y = available_spaces[position][1];
 
-            this.board[x][y] = new Tile(2, '#eee4da');
+            let roll = Math.random();
+            let value = 2;
+
+            if (roll < this.chance) {
+                value = 4;   
+            }
+
+            this.board[x][y] = new Tile(value);
         }
         else {
             this.area.dispatchEvent(new Event('gameOver'));
         }
+    }
+
+    moveBoard(x, y) {
+        console.log('Moving board');  
     }
 }
