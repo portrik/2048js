@@ -48,11 +48,8 @@ export class PlayArea {
             this.board[i] = new Array(this.size);
         }
 
-        let x = Math.round(Math.random() * (this.size - 1));
-        let y = Math.round(Math.random() * (this.size - 1));
-
-        this.board[x][y] = new Tile(2, '#eee4da');
-
+        this.spawnTile();
+        this.spawnTile();
         this.drawBoard();
     }
 
@@ -71,12 +68,21 @@ export class PlayArea {
 
                 if (this.board[j][i]) {
                     context.fillStyle = this.board[j][i].color;
+                    context.fillRect(x, y, tileSize, tileSize);
+
+                    context.font = '30px Arial';
+                    context.textAlign = 'center';
+                    context.fillStyle = 'black';
+                    let textX = x + Math.round(tileSize / 2);
+                    let textY = y + Math.round(tileSize / 2);
+
+                    context.fillText(this.board[j][i].value, textX, textY);
                 }
                 else {
                     context.fillStyle = 'rgba(238, 228, 218, 0.35)';
+                    context.fillRect(x, y, tileSize, tileSize);
                 }
 
-                context.fillRect(x, y, tileSize, tileSize);
                 x += tileSize + margin;
             }
 
@@ -86,6 +92,25 @@ export class PlayArea {
     }
 
     spawnTile() {
-        // TODO: Nice and clean code to generate new tiles
+        let available_spaces = [];
+        
+        for (let j = 0; j < this.board.length; ++j) {
+            for (let i = 0; i < this.board.length; ++i) {
+                if (this.board[j][i] == null) {
+                    available_spaces.push([j, i]);
+                }
+            }
+        }
+
+        if (available_spaces.length > 0) {
+            let position = Math.round(Math.random() * (available_spaces.length - 1));
+            let x = available_spaces[position][0];
+            let y = available_spaces[position][1];
+
+            this.board[x][y] = new Tile(2, '#eee4da');
+        }
+        else {
+            this.area.dispatchEvent(new Event('gameOver'));
+        }
     }
 }
