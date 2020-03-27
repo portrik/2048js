@@ -56,9 +56,14 @@ export class Controller {
      * @param event - keyDown event
      */
     handleKeydown(event) {
-        if (Object.keys(this.keyCodes).indexOf(event.key) != -1) {
+        if (Object.keys(this.keyCodes).indexOf(event.key) > -1) {
             let moveEvent = new Event('move' + this.keyCodes[event.key]);
             this.targetElement.dispatchEvent(moveEvent);
+
+            // Stops window from scrolling on Arrow press
+            if (event.key.includes('Arrow')) {
+                event.preventDefault();
+            }
         }
     }
     
