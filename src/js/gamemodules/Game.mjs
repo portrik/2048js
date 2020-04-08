@@ -29,6 +29,7 @@ export class Game {
     moveLeft() {
         console.log('Moving left');
         document.getElementById('debug').innerText = 'Moving left';
+        this.playArea.moveLeft();
     }
 
     moveUp() {
