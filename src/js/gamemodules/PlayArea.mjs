@@ -28,7 +28,7 @@ export class PlayArea {
 
         this.width = width;
         this.height = height;
-        
+
         let context = this.area.getContext('2d');
         context.canvas.width = width;
         context.canvas.height = height;
@@ -46,6 +46,7 @@ export class PlayArea {
 
         for (let i = 0; i < this.size; ++i) {
             this.board[i] = new Array(this.size);
+            this.board[i].fill(null);
         }
 
         this.spawnTile();
@@ -59,6 +60,7 @@ export class PlayArea {
         let margin = Math.round(tileSize / (this.size + 1));
 
         let context = this.area.getContext('2d');
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
         let x = margin;
         let y = margin;
@@ -92,9 +94,13 @@ export class PlayArea {
         }
     }
 
+    dispatchVictory() {
+        this.area.dispatchEvent(new Event('victory'));
+    }
+
     spawnTile() {
         let available_spaces = [];
-        
+
         for (let j = 0; j < this.board.length; ++j) {
             for (let i = 0; i < this.board.length; ++i) {
                 if (this.board[j][i] == null) {
@@ -112,7 +118,7 @@ export class PlayArea {
             let value = 2;
 
             if (roll < this.chance) {
-                value = 4;   
+                value = 4;
             }
 
             this.board[x][y] = new Tile(value);
@@ -122,7 +128,68 @@ export class PlayArea {
         }
     }
 
-    moveBoard(x, y) {
-        console.log('Moving board');  
+    moveTiles() {
+        let canSpawn = false;
+
+        for (let i = 0; i < this.size; ++i) {
+            let newArray = this.shiftArray(this.board[i]);
+
+            if (!this.compareArrays(newArray, this.board[i])) {
+                this.board[i] = newArray;
+                canSpawn = true;
+            }
+        }
+        
+        if (canSpawn) {
+            this.spawnTile();
+        }
+        
+        this.drawBoard();
+    }
+
+    compareArrays(first, second) {
+        let result = true;
+
+        for (let i = 0; i < first.length; i++) {
+            if (first[i] != second[i]) {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    shiftArray(array) {
+        let newArray = array.filter(item => item != null);
+        let victory = false;
+        let reshift = false;
+
+        for (let i = newArray.length; i < this.size; i++) {
+            newArray.push(null);
+        }
+
+        for (let i = 0; i < newArray.length; i++) {
+            if (newArray[i] != null && newArray[i + 1] != null) {
+                if (newArray[i].value == newArray[i + 1].value) {
+
+                    if (newArray[i].merge()) {
+                        victory = true;
+                    }
+
+                    newArray[i + 1] = null;
+                    reshift = true;
+                }
+            }
+        }
+
+        if (reshift) {
+            newArray = this.shiftArray(newArray);
+        }
+
+        if (victory) {
+            this.dispatchVictory();
+        }
+
+        return newArray;
     }
 }
