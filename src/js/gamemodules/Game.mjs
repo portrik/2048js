@@ -20,31 +20,10 @@ export class Game {
     setUpController(playArea) {
         this.controller = new Controller(playArea);
 
-        playArea.addEventListener('moveLeft', () => this.moveLeft());
-        playArea.addEventListener('moveUp', () => this.moveUp());
-        playArea.addEventListener('moveRight', () => this.moveRight());
-        playArea.addEventListener('moveDown', () => this.moveDown());
-    }
-
-    moveLeft() {
-        console.log('Moving left');
-        document.getElementById('debug').innerText = 'Moving left';
-        this.playArea.moveLeft();
-    }
-
-    moveUp() {
-        console.log('Moving up');
-        document.getElementById('debug').innerText = 'Moving up';
-    }
-
-    moveRight() {
-        console.log('Moving right');
-        document.getElementById('debug').innerText = 'Moving right';
-    }
-
-    moveDown() {
-        console.log('Moving down');
-        document.getElementById('debug').innerText = 'Moving down';
+        playArea.addEventListener('moveLeft', () => this.playArea.moveTiles('left'));
+        playArea.addEventListener('moveUp', () => this.playArea.moveTiles('up'));
+        playArea.addEventListener('moveRight', () => this.playArea.moveTiles('right'));
+        playArea.addEventListener('moveDown', () => this.playArea.moveTiles('down'));
     }
 
     gameOver() {

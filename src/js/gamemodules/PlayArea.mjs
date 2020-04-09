@@ -128,22 +128,23 @@ export class PlayArea {
         }
     }
 
-    moveTiles() {
-        let canSpawn = false;
+    checkBoard() {
 
-        for (let i = 0; i < this.size; ++i) {
-            let newArray = this.shiftArray(this.board[i]);
+    }
 
-            if (!this.compareArrays(newArray, this.board[i])) {
-                this.board[i] = newArray;
-                canSpawn = true;
+    moveTiles(direction) {
+        let tmpArray = this.getMovableArray(direction);
+
+        for (let i = 0; i < tmpArray.length; ++i) {
+            let newArray = this.cleanUpLine(tmpArray[i]);
+
+            if (!this.compareArrays(newArray, tmpArray[i])) {
+                tmpArray[i] = newArray;
             }
         }
         
-        if (canSpawn) {
-            this.spawnTile();
-        }
-        
+        this.applyMovedArray(tmpArray, direction);
+        this.checkBoard();
         this.drawBoard();
     }
 
@@ -159,37 +160,102 @@ export class PlayArea {
         return result;
     }
 
-    shiftArray(array) {
-        let newArray = array.filter(item => item != null);
-        let victory = false;
-        let reshift = false;
+    cleanUpLine(array) {
+        let cleanedLine = this.shiftLine(array);
 
-        for (let i = newArray.length; i < this.size; i++) {
-            newArray.push(null);
-        }
-
-        for (let i = 0; i < newArray.length; i++) {
-            if (newArray[i] != null && newArray[i + 1] != null) {
-                if (newArray[i].value == newArray[i + 1].value) {
-
-                    if (newArray[i].merge()) {
-                        victory = true;
-                    }
-
-                    newArray[i + 1] = null;
-                    reshift = true;
+        for (let i = 0; i < cleanedLine.length - 1; ++i) {
+            if (cleanedLine[i] != null && cleanedLine[i + 1] != null) {
+                if (cleanedLine[i].value == cleanedLine[i + 1].value) {
+                    cleanedLine[i].merge();
+                    cleanedLine[i + 1] = null;
                 }
             }
         }
 
-        if (reshift) {
-            newArray = this.shiftArray(newArray);
+        cleanedLine = this.shiftLine(cleanedLine);
+
+        return cleanedLine;
+    }
+
+    shiftLine(array) {
+        let shiftedLine = array.filter(tile => tile != null);
+
+        for (let i = shiftedLine.length; i < array.length; ++i) {
+            shiftedLine.push(null);
         }
 
-        if (victory) {
-            this.dispatchVictory();
+        return shiftedLine;
+    }
+    
+    getMovableArray(direction) {
+        let result = [];
+
+        switch(direction) {
+            case 'left':
+                this.board.forEach(row => result.push(row));
+                break;
+            case 'right':
+                this.board.forEach(row => result.push(row.reverse()));
+                break;
+            case 'up':
+                for (let i = 0; i < this.size; ++i) {
+                    result[i] = [];
+
+                    for (let j = 0; j < this.size; ++j) {
+                        result[i].push(this.board[j][i]);
+                    }
+                }
+                break;
+            case 'down':
+                for (let i = 0; i < this.size; ++i) {
+                    result[i] = [];
+
+                    for (let j = this.size - 1; j >= 0; ++j) {
+                        result[i].push(this.board[j][i]);
+                    }
+
+                    result[i] = result[i];
+                }
+                break;
         }
 
-        return newArray;
+        return result;
+    }
+
+    applyMovedArray(newArray, direction) {
+        switch (direction) {
+            case 'left':
+                for (let i = 0; i < newArray.length; ++i) {
+                    this.board[i] = newArray[i];
+                }
+                break;
+            case 'right':
+                for (let i = 0; i < newArray.length; ++i) {
+                    this.board[i] = newArray[i].reverse();
+                }
+                break;
+            case 'up':
+                for (let i = 0; i < newArray.length; ++i) {
+                    let tmpArray = [];
+
+                    for (let j = 0; j < newArray.length; ++j) {
+                        tmpArray.push(newArray[j][i]);
+                    }
+
+                    this.board[i] = tmpArray;
+                }
+                break;
+            case 'down':
+                for (let i = 0; i < newArray.length; ++i) {
+                    let tmpArray = [];
+
+                    for (let j = newArray.length - 1; j >= 0; ++j) {
+                        tmpArray.push(newArray[j][i]);
+                    }
+
+                    this.board[i] = tmpArray;
+                }
+                break;
+        }
     }
 }
