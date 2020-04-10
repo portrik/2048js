@@ -9,14 +9,14 @@ export class Controller {
 
         // Look up table for keyboard inputs
         this.keyCodes = {
-            'ArrowLeft': 'Left',
-            'ArrowUp': 'Up',
-            'ArrowRight': 'Right',
-            'ArrowDown': 'Down',
-            'a': 'Left',
-            'w': 'Up',
-            'd': 'Right',
-            's': 'Down',
+            'ArrowLeft': 'left',
+            'ArrowUp': 'up',
+            'ArrowRight': 'right',
+            'ArrowDown': 'down',
+            'a': 'left',
+            'w': 'up',
+            'd': 'right',
+            's': 'down',
         };
 
         // Initial values for touch input. Will be rewritten in handleTouchStart
@@ -57,7 +57,13 @@ export class Controller {
      */
     handleKeydown(event) {
         if (Object.keys(this.keyCodes).indexOf(event.key) > -1) {
-            let moveEvent = new Event('move' + this.keyCodes[event.key]);
+            
+            let moveEvent = new CustomEvent('moveGameBoard', {
+                detail: {
+                    'direction': this.keyCodes[event.key],
+                }
+            });
+
             this.targetElement.dispatchEvent(moveEvent);
 
             // Stops window from scrolling on Arrow press
@@ -91,24 +97,30 @@ export class Controller {
 
         if (Math.abs(newY - this.touchY) > this.tolerance) {
             if (newY > this.touchY) {
-                direction = 'Down';
+                direction = 'down';
             }
             else {
-                direction = 'Up';
+                direction = 'up';
             }
         }
         else if (Math.abs(newX - this.touchX) > this.tolerance) {
             if (newX > this.touchX) {
-                direction = 'Right';
+                direction = 'right';
             }
             else {
-                direction = 'Left';
+                direction = 'left';
             }
         }
 
         // Event is dispatched only if differneces are bigger than tolerance.
         if (direction !== '') {
-            this.targetElement.dispatchEvent(new Event('move' + direction));
+            let moveEvent = new CustomEvent('moveGameBoard', {
+                detail: {
+                    direction,
+                }
+            });
+
+            this.targetElement.dispatchEvent(moveEvent);
         }
     }
 }

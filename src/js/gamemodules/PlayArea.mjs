@@ -2,7 +2,7 @@ import { Tile } from './Tile.mjs';
 
 export class PlayArea {
     constructor(area) {
-        this.chance = 0.2;
+        this.chance = 0.1;
         this.area = area;
         this.resizeArea();
 
@@ -49,8 +49,30 @@ export class PlayArea {
             this.board[i].fill(null);
         }
 
-        this.spawnTile();
-        this.spawnTile();
+        this.checkBoard(true);
+        this.checkBoard(true);
+        this.drawBoard();
+    }
+
+    /**
+     * Moves Tiles on the board, checks for availavble spaces and redraws canvas.
+     * @param direction - Direction indicated by Controller.
+     */
+    moveTiles(direction) {
+        let tmpArray = this.getMovableArray(direction); // Gets array to movable positions
+        let canSpawn = false;
+
+        for (let i = 0; i < tmpArray.length; ++i) {
+            let newArray = this.cleanUpLine(tmpArray[i]);
+
+            if (!this.compareArrays(newArray, tmpArray[i])) {
+                tmpArray[i] = newArray;
+                canSpawn = true; // Only triggers when at least one row changes
+            }
+        }
+
+        this.applyMovedArray(tmpArray, direction); // Returns array to normal position
+        this.checkBoard(canSpawn);
         this.drawBoard();
     }
 
@@ -94,59 +116,73 @@ export class PlayArea {
         }
     }
 
+    /**
+     * Signalizes victory to Game module
+     */
     dispatchVictory() {
         this.area.dispatchEvent(new Event('victory'));
     }
 
-    spawnTile() {
-        let available_spaces = [];
+    spawnTile(availableSpaces) {
+        let position = Math.round(Math.random() * (availableSpaces.length - 1));
+        let x = availableSpaces[position][0];
+        let y = availableSpaces[position][1];
+
+        let roll = Math.random();
+        let value = 2;
+
+        if (roll < this.chance) {
+            value = 4;
+        }
+
+        this.board[x][y] = new Tile(value);
+    }
+
+    /**
+     * Checks if it is still possible to play on.
+     * Spawns new Tile if enabled and available spaces exist.
+     * @param canSpawn - Spawn enabler
+     */
+    checkBoard(canSpawn) {
+        let availableSpaces = [];
 
         for (let j = 0; j < this.board.length; ++j) {
             for (let i = 0; i < this.board.length; ++i) {
                 if (this.board[j][i] == null) {
-                    available_spaces.push([j, i]);
+                    availableSpaces.push([j, i]);
                 }
             }
         }
 
-        if (available_spaces.length > 0) {
-            let position = Math.round(Math.random() * (available_spaces.length - 1));
-            let x = available_spaces[position][0];
-            let y = available_spaces[position][1];
+        if (availableSpaces.length > 0 && canSpawn) {
+            this.spawnTile(availableSpaces);
+        }
+        else if (availableSpaces.length == 0) {
+            let canMove = false;
 
-            let roll = Math.random();
-            let value = 2;
+            for (let i = 0; i < this.size - 1; ++i) {
+                for (let j = 0; j < this.size - 1; ++j) {
+                    if (this.board[i][j].value == this.board[i + 1][j].value) {
+                        canMove = true;
+                    }
 
-            if (roll < this.chance) {
-                value = 4;
+                    if (this.board[i][j].value == this.board[i][j + 1].value) {
+                        canMove = true;
+                    }
+                }
             }
 
-            this.board[x][y] = new Tile(value);
-        }
-        else {
-            this.area.dispatchEvent(new Event('gameOver'));
+            if (!canMove) {
+                this.area.dispatchEvent(new Event('gameOver'));
+            }
         }
     }
 
-    moveTiles() {
-        let canSpawn = false;
-
-        for (let i = 0; i < this.size; ++i) {
-            let newArray = this.shiftArray(this.board[i]);
-
-            if (!this.compareArrays(newArray, this.board[i])) {
-                this.board[i] = newArray;
-                canSpawn = true;
-            }
-        }
-        
-        if (canSpawn) {
-            this.spawnTile();
-        }
-        
-        this.drawBoard();
-    }
-
+    /**
+     * Compares two arrays
+     * @param first 
+     * @param second 
+     */
     compareArrays(first, second) {
         let result = true;
 
@@ -159,37 +195,126 @@ export class PlayArea {
         return result;
     }
 
-    shiftArray(array) {
-        let newArray = array.filter(item => item != null);
-        let victory = false;
-        let reshift = false;
+    /**
+     * Moves lines of array lines to the side and merges possible Tiles.
+     * @param array - Array of arrays
+     */
+    cleanUpLine(array) {
+        let cleanedLine = this.shiftLine(array); // Shifts lines to the side
 
-        for (let i = newArray.length; i < this.size; i++) {
-            newArray.push(null);
-        }
+        for (let i = 0; i < cleanedLine.length - 1; ++i) {
+            if (cleanedLine[i] != null && cleanedLine[i + 1] != null) {
+                if (cleanedLine[i].value == cleanedLine[i + 1].value) {
+                    cleanedLine[i].merge();
 
-        for (let i = 0; i < newArray.length; i++) {
-            if (newArray[i] != null && newArray[i + 1] != null) {
-                if (newArray[i].value == newArray[i + 1].value) {
+                    this.area.dispatchEvent(new CustomEvent('scoreUp', {
+                        detail: {
+                            'value': cleanedLine[i].value
+                        }
+                    }));
 
-                    if (newArray[i].merge()) {
-                        victory = true;
-                    }
-
-                    newArray[i + 1] = null;
-                    reshift = true;
+                    cleanedLine[i + 1] = null;
                 }
             }
         }
 
-        if (reshift) {
-            newArray = this.shiftArray(newArray);
+        cleanedLine = this.shiftLine(cleanedLine); // Shifts to the side again to remove empty spaces between
+
+        return cleanedLine;
+    }
+
+    /**
+     * Shifts items in rows to a side and pads their end with null.
+     * @param array - Array of arrays
+     */
+    shiftLine(array) {
+        let shiftedLine = array.filter(tile => tile != null);
+
+        for (let i = shiftedLine.length; i < array.length; ++i) {
+            shiftedLine.push(null);
         }
 
-        if (victory) {
-            this.dispatchVictory();
+        return shiftedLine;
+    }
+
+    /**
+     * Returns an array of arrays to be cleaned up in specified direction.
+     * @param direction - Direction of movement
+     */
+    getMovableArray(direction) {
+        let result = [];
+
+        switch (direction) {
+            case 'left':
+                this.board.forEach(row => result.push(row));
+                break;
+            case 'right':
+                this.board.forEach(row => result.push(row.reverse()));
+                break;
+            case 'up':
+                for (let i = 0; i < this.size; ++i) {
+                    result[i] = [];
+
+                    for (let j = 0; j < this.size; ++j) {
+                        result[i].push(this.board[j][i]);
+                    }
+                }
+                break;
+            case 'down':
+                for (let i = 0; i < this.size; ++i) {
+                    result[i] = [];
+
+                    for (let j = this.size - 1; j >= 0; --j) {
+                        result[i].push(this.board[j][i]);
+                    }
+                }
+                break;
         }
 
-        return newArray;
+        return result;
+    }
+
+    /**
+     * Applies moved array to board.
+     * @param newArray - Array of arrays
+     * @param direction - Direction of movement
+     */
+    applyMovedArray(newArray, direction) {
+        switch (direction) {
+            case 'left':
+                for (let i = 0; i < newArray.length; ++i) {
+                    this.board[i] = newArray[i];
+                }
+                break;
+            case 'right':
+                for (let i = 0; i < newArray.length; ++i) {
+                    this.board[i] = newArray[i].reverse();
+                }
+                break;
+            case 'up':
+                for (let i = 0; i < newArray.length; ++i) {
+                    let tmpArray = [];
+
+                    for (let j = 0; j < newArray.length; ++j) {
+                        tmpArray.push(newArray[j][i]);
+                    }
+
+                    this.board[i] = tmpArray;
+                }
+                break;
+            case 'down':
+                for (let i = 0; i < newArray.length; ++i) {
+                    let tmpArray = [];
+
+                    for (let j = 0; j < newArray.length; ++j) {
+                        tmpArray.push(newArray[j][i]);
+                    }
+
+                    this.board[i] = tmpArray;
+                }
+
+                this.board.reverse();
+                break;
+        }
     }
 }

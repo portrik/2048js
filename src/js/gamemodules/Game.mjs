@@ -1,10 +1,13 @@
 import { PlayArea } from './PlayArea.mjs';
 import { Controller } from './Controller.mjs';
+import { Storage } from './Storage.mjs';
 
 export class Game {
     constructor() {
         this.score = 0;
         this.size = 4;
+        this.saveTimeout = null;
+        this.storage = new Storage();
     }
 
     setUpGame(playArea) {
@@ -12,42 +15,34 @@ export class Game {
 
         this.playArea = new PlayArea(playArea);
         this.playArea.setUp(this.size);
-        
+
+        document.getElementById('score').innerText = this.score;        
         playArea.addEventListener('gameOver', () => this.gameOver());
         playArea.addEventListener('victory', () => this.victory());
+        playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value)); 
     }
 
     setUpController(playArea) {
         this.controller = new Controller(playArea);
 
-        playArea.addEventListener('moveLeft', () => this.moveLeft());
-        playArea.addEventListener('moveUp', () => this.moveUp());
-        playArea.addEventListener('moveRight', () => this.moveRight());
-        playArea.addEventListener('moveDown', () => this.moveDown());
+        playArea.addEventListener('moveGameBoard', (event) => this.playArea.moveTiles(event.detail.direction));
     }
 
-    moveLeft() {
-        console.log('Moving left');
-        document.getElementById('debug').innerText = 'Moving left';
-        this.playArea.moveLeft();
-    }
+    updateScore(value) {
+        this.score += value;
 
-    moveUp() {
-        console.log('Moving up');
-        document.getElementById('debug').innerText = 'Moving up';
-    }
+        document.getElementById('score').innerText = this.score;
 
-    moveRight() {
-        console.log('Moving right');
-        document.getElementById('debug').innerText = 'Moving right';
-    }
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+            this.saveTimeout = null;
+        }
 
-    moveDown() {
-        console.log('Moving down');
-        document.getElementById('debug').innerText = 'Moving down';
+        this.saveTimeout = setTimeout(() => this.storage.storeBoard(this.playArea.board, this.score), 2000);
     }
 
     gameOver() {
+        this.controller.disableController();
         console.log('Game over');
     }
 
