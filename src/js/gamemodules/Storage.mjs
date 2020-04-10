@@ -3,12 +3,14 @@ export class Storage {
         this.isUsable = this.checkAvailability();
     }
 
+    /**
+     * Turns off usage of localStorage if it is not available.
+     */
     checkAvailability() {
-        let storage;
         let result;
+        let x = '__storage_test__';
 
         try {
-            let x = '__storage_test__';
             localStorage.setItem(x, x);
             localStorage.removeItem(x);
 
@@ -21,6 +23,11 @@ export class Storage {
         return result;
     }
 
+    /**
+     * Stores game information to localStorage in JSON format.
+     * @param board - Board with Tiles
+     * @param score - Current score
+     */
     storeBoard(board, score) {
         if (this.isUsable){
             let convertedBoard =  {
@@ -32,6 +39,9 @@ export class Storage {
         }
     }
 
+    /**
+     * Loads game information from localStorage.
+     */
     loadBoard() {
         if (this.isUsable) {
             let storedBoard = localStorage.getItem('board');

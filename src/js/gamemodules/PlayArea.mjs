@@ -54,6 +54,28 @@ export class PlayArea {
         this.drawBoard();
     }
 
+    /**
+     * Moves Tiles on the board, checks for availavble spaces and redraws canvas.
+     * @param direction - Direction indicated by Controller.
+     */
+    moveTiles(direction) {
+        let tmpArray = this.getMovableArray(direction); // Gets array to movable positions
+        let canSpawn = false;
+
+        for (let i = 0; i < tmpArray.length; ++i) {
+            let newArray = this.cleanUpLine(tmpArray[i]);
+
+            if (!this.compareArrays(newArray, tmpArray[i])) {
+                tmpArray[i] = newArray;
+                canSpawn = true; // Only triggers when at least one row changes
+            }
+        }
+
+        this.applyMovedArray(tmpArray, direction); // Returns array to normal position
+        this.checkBoard(canSpawn);
+        this.drawBoard();
+    }
+
     // TODO: Make margin of sides fixed value 
     drawBoard() {
         let tileSize = Math.round(this.width / (this.size + 1));
@@ -94,6 +116,9 @@ export class PlayArea {
         }
     }
 
+    /**
+     * Signalizes victory to Game module
+     */
     dispatchVictory() {
         this.area.dispatchEvent(new Event('victory'));
     }
@@ -113,6 +138,11 @@ export class PlayArea {
         this.board[x][y] = new Tile(value);
     }
 
+    /**
+     * Checks if it is still possible to play on.
+     * Spawns new Tile if enabled and available spaces exist.
+     * @param canSpawn - Spawn enabler
+     */
     checkBoard(canSpawn) {
         let availableSpaces = [];
 
@@ -124,12 +154,10 @@ export class PlayArea {
             }
         }
 
-        if (availableSpaces.length > 0) {
-            if (canSpawn) {
-                this.spawnTile(availableSpaces);
-            }
+        if (availableSpaces.length > 0 && canSpawn) {
+            this.spawnTile(availableSpaces);
         }
-        else {
+        else if (availableSpaces.length == 0) {
             let canMove = false;
 
             for (let i = 0; i < this.size - 1; ++i) {
@@ -150,24 +178,11 @@ export class PlayArea {
         }
     }
 
-    moveTiles(direction) {
-        let tmpArray = this.getMovableArray(direction);
-        let canSpawn = false;
-
-        for (let i = 0; i < tmpArray.length; ++i) {
-            let newArray = this.cleanUpLine(tmpArray[i]);
-
-            if (!this.compareArrays(newArray, tmpArray[i])) {
-                tmpArray[i] = newArray;
-                canSpawn = true;
-            }
-        }
-        
-        this.applyMovedArray(tmpArray, direction);
-        this.checkBoard(canSpawn);
-        this.drawBoard();
-    }
-
+    /**
+     * Compares two arrays
+     * @param first 
+     * @param second 
+     */
     compareArrays(first, second) {
         let result = true;
 
@@ -180,8 +195,12 @@ export class PlayArea {
         return result;
     }
 
+    /**
+     * Moves lines of array lines to the side and merges possible Tiles.
+     * @param array - Array of arrays
+     */
     cleanUpLine(array) {
-        let cleanedLine = this.shiftLine(array);
+        let cleanedLine = this.shiftLine(array); // Shifts lines to the side
 
         for (let i = 0; i < cleanedLine.length - 1; ++i) {
             if (cleanedLine[i] != null && cleanedLine[i + 1] != null) {
@@ -193,17 +212,21 @@ export class PlayArea {
                             'value': cleanedLine[i].value
                         }
                     }));
-                    
+
                     cleanedLine[i + 1] = null;
                 }
             }
         }
 
-        cleanedLine = this.shiftLine(cleanedLine);
+        cleanedLine = this.shiftLine(cleanedLine); // Shifts to the side again to remove empty spaces between
 
         return cleanedLine;
     }
 
+    /**
+     * Shifts items in rows to a side and pads their end with null.
+     * @param array - Array of arrays
+     */
     shiftLine(array) {
         let shiftedLine = array.filter(tile => tile != null);
 
@@ -213,11 +236,15 @@ export class PlayArea {
 
         return shiftedLine;
     }
-    
+
+    /**
+     * Returns an array of arrays to be cleaned up in specified direction.
+     * @param direction - Direction of movement
+     */
     getMovableArray(direction) {
         let result = [];
 
-        switch(direction) {
+        switch (direction) {
             case 'left':
                 this.board.forEach(row => result.push(row));
                 break;
@@ -247,6 +274,11 @@ export class PlayArea {
         return result;
     }
 
+    /**
+     * Applies moved array to board.
+     * @param newArray - Array of arrays
+     * @param direction - Direction of movement
+     */
     applyMovedArray(newArray, direction) {
         switch (direction) {
             case 'left':
@@ -266,7 +298,7 @@ export class PlayArea {
                     for (let j = 0; j < newArray.length; ++j) {
                         tmpArray.push(newArray[j][i]);
                     }
-                    
+
                     this.board[i] = tmpArray;
                 }
                 break;

@@ -25,10 +25,7 @@ export class Game {
     setUpController(playArea) {
         this.controller = new Controller(playArea);
 
-        playArea.addEventListener('moveLeft', () => this.playArea.moveTiles('left'));
-        playArea.addEventListener('moveUp', () => this.playArea.moveTiles('up'));
-        playArea.addEventListener('moveRight', () => this.playArea.moveTiles('right'));
-        playArea.addEventListener('moveDown', () => this.playArea.moveTiles('down'));
+        playArea.addEventListener('moveGameBoard', (event) => this.playArea.moveTiles(event.detail.direction));
     }
 
     updateScore(value) {
