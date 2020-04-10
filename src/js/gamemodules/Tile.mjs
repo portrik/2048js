@@ -24,4 +24,8 @@ export class Tile {
 
         return this.value == 2048;
     }
+
+    toString() {
+        return this.value.toString();
+    }
 }

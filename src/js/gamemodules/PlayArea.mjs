@@ -2,7 +2,7 @@ import { Tile } from './Tile.mjs';
 
 export class PlayArea {
     constructor(area) {
-        this.chance = 0.2;
+        this.chance = 0.1;
         this.area = area;
         this.resizeArea();
 
@@ -49,8 +49,8 @@ export class PlayArea {
             this.board[i].fill(null);
         }
 
-        this.spawnTile();
-        this.spawnTile();
+        this.checkBoard(true);
+        this.checkBoard(true);
         this.drawBoard();
     }
 
@@ -98,53 +98,73 @@ export class PlayArea {
         this.area.dispatchEvent(new Event('victory'));
     }
 
-    spawnTile() {
-        let available_spaces = [];
+    spawnTile(availableSpaces) {
+        let position = Math.round(Math.random() * (availableSpaces.length - 1));
+        let x = availableSpaces[position][0];
+        let y = availableSpaces[position][1];
+
+        let roll = Math.random();
+        let value = 2;
+
+        if (roll < this.chance) {
+            value = 4;
+        }
+
+        this.board[x][y] = new Tile(value);
+    }
+
+    checkBoard(canSpawn) {
+        let availableSpaces = [];
 
         for (let j = 0; j < this.board.length; ++j) {
             for (let i = 0; i < this.board.length; ++i) {
                 if (this.board[j][i] == null) {
-                    available_spaces.push([j, i]);
+                    availableSpaces.push([j, i]);
                 }
             }
         }
 
-        if (available_spaces.length > 0) {
-            let position = Math.round(Math.random() * (available_spaces.length - 1));
-            let x = available_spaces[position][0];
-            let y = available_spaces[position][1];
-
-            let roll = Math.random();
-            let value = 2;
-
-            if (roll < this.chance) {
-                value = 4;
+        if (availableSpaces.length > 0) {
+            if (canSpawn) {
+                this.spawnTile(availableSpaces);
             }
-
-            this.board[x][y] = new Tile(value);
         }
         else {
-            this.area.dispatchEvent(new Event('gameOver'));
+            let canMove = false;
+
+            for (let i = 0; i < this.size - 1; ++i) {
+                for (let j = 0; j < this.size - 1; ++j) {
+                    if (this.board[i][j].value == this.board[i + 1][j].value) {
+                        canMove = true;
+                    }
+
+                    if (this.board[i][j].value == this.board[i][j + 1].value) {
+                        canMove = true;
+                    }
+                }
+            }
+
+            if (!canMove) {
+                this.area.dispatchEvent(new Event('gameOver'));
+            }
         }
-    }
-
-    checkBoard() {
-
     }
 
     moveTiles(direction) {
         let tmpArray = this.getMovableArray(direction);
+        let canSpawn = false;
 
         for (let i = 0; i < tmpArray.length; ++i) {
             let newArray = this.cleanUpLine(tmpArray[i]);
 
             if (!this.compareArrays(newArray, tmpArray[i])) {
                 tmpArray[i] = newArray;
+                canSpawn = true;
             }
         }
         
         this.applyMovedArray(tmpArray, direction);
-        this.checkBoard();
+        this.checkBoard(canSpawn);
         this.drawBoard();
     }
 
@@ -167,6 +187,13 @@ export class PlayArea {
             if (cleanedLine[i] != null && cleanedLine[i + 1] != null) {
                 if (cleanedLine[i].value == cleanedLine[i + 1].value) {
                     cleanedLine[i].merge();
+
+                    this.area.dispatchEvent(new CustomEvent('scoreUp', {
+                        detail: {
+                            'value': cleanedLine[i].value
+                        }
+                    }));
+                    
                     cleanedLine[i + 1] = null;
                 }
             }
