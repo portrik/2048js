@@ -210,11 +210,9 @@ export class PlayArea {
                 for (let i = 0; i < this.size; ++i) {
                     result[i] = [];
 
-                    for (let j = this.size - 1; j >= 0; ++j) {
+                    for (let j = this.size - 1; j >= 0; --j) {
                         result[i].push(this.board[j][i]);
                     }
-
-                    result[i] = result[i];
                 }
                 break;
         }
@@ -241,7 +239,7 @@ export class PlayArea {
                     for (let j = 0; j < newArray.length; ++j) {
                         tmpArray.push(newArray[j][i]);
                     }
-
+                    
                     this.board[i] = tmpArray;
                 }
                 break;
@@ -249,12 +247,14 @@ export class PlayArea {
                 for (let i = 0; i < newArray.length; ++i) {
                     let tmpArray = [];
 
-                    for (let j = newArray.length - 1; j >= 0; ++j) {
+                    for (let j = 0; j < newArray.length; ++j) {
                         tmpArray.push(newArray[j][i]);
                     }
 
                     this.board[i] = tmpArray;
                 }
+
+                this.board.reverse();
                 break;
         }
     }
