@@ -5,9 +5,31 @@ export class PlayArea {
         this.chance = 0.1;
         this.area = area;
         this.resizeArea();
+        this.size = 0;
+        this.board = [];
+        this.previousState = null;
 
         // Resizes the game area at every window resize
         window.addEventListener('resize', () => this.resizeArea());
+    }
+
+    setBoard(board) {
+        this.size = board.length;
+        
+        for (let i = 0; i < this.size; ++i) {
+            this.board[i] = [];
+
+            for (let j = 0; j < board[i].length; ++j) {
+                if (board[i][j]) {
+                    this.board[i][j] = new Tile(board[i][j].value);
+                }
+                else {
+                    this.board[i][j] = null;
+                }
+            }
+        }
+
+        this.drawBoard();
     }
 
     /**
@@ -54,11 +76,41 @@ export class PlayArea {
         this.drawBoard();
     }
 
+    undoLastMove() {
+        if (this.previousState) {
+            this.board = this.copy2DArray(this.previousState);
+
+            this.previousState = null;
+            this.drawBoard();
+        }
+    }
+
+    copy2DArray(source) {
+        let result = [];
+
+        for (let i = 0; i < source.length; ++i) {
+            result[i] = [];
+
+            for (let j = 0; j < source[i].length; ++j) {
+                if (source[i][j]) {
+                    result[i][j] = new Tile(source[i][j].value);
+                }
+                else {
+                    result[i][j] = null;
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Moves Tiles on the board, checks for availavble spaces and redraws canvas.
      * @param direction - Direction indicated by Controller.
      */
     moveTiles(direction) {
+        this.previousState = this.copy2DArray(this.board);
+
         let tmpArray = this.getMovableArray(direction); // Gets array to movable positions
         let canSpawn = false;
 
@@ -205,7 +257,11 @@ export class PlayArea {
         for (let i = 0; i < cleanedLine.length - 1; ++i) {
             if (cleanedLine[i] != null && cleanedLine[i + 1] != null) {
                 if (cleanedLine[i].value == cleanedLine[i + 1].value) {
-                    cleanedLine[i].merge();
+                    let victory = cleanedLine[i].merge();
+
+                    if (victory) {
+                        this.dispatchVictory();
+                    }
 
                     this.area.dispatchEvent(new CustomEvent('scoreUp', {
                         detail: {
