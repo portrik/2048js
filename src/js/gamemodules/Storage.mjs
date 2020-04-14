@@ -43,10 +43,14 @@ export class Storage {
      * Loads game information from localStorage.
      */
     loadBoard() {
+        let result = null;
+
         if (this.isUsable) {
             let storedBoard = localStorage.getItem('board');
 
-            return storedBoard;
+            result =  JSON.parse(storedBoard);
         }
+
+        return result;
     }
 }

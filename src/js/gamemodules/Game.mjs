@@ -5,6 +5,7 @@ import { Storage } from './Storage.mjs';
 export class Game {
     constructor() {
         this.score = 0;
+        this.lastValue = 0;
         this.size = 4;
         this.saveTimeout = null;
         this.storage = new Storage();
@@ -12,11 +13,21 @@ export class Game {
 
     setUpGame(playArea) {
         this.setUpController(playArea);
-
         this.playArea = new PlayArea(playArea);
-        this.playArea.setUp(this.size);
 
-        document.getElementById('score').innerText = this.score;        
+        let localData = this.storage.loadBoard();
+
+        if (localData) {
+            this.score = localData["score"];
+            this.size = localData["board"].length;
+            this.playArea.setBoard(localData["board"]);
+        }
+        else {
+            this.playArea.setUp(this.size);
+        }
+
+        document.getElementById('score').innerText = this.score;
+           
         playArea.addEventListener('gameOver', () => this.gameOver());
         playArea.addEventListener('victory', () => this.victory());
         playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value)); 
@@ -29,6 +40,7 @@ export class Game {
     }
 
     updateScore(value) {
+        this.lastValue = value;
         this.score += value;
 
         document.getElementById('score').innerText = this.score;
@@ -39,6 +51,24 @@ export class Game {
         }
 
         this.saveTimeout = setTimeout(() => this.storage.storeBoard(this.playArea.board, this.score), 2000);
+    }
+
+    resetGame() {
+        this.score = 0;
+        this.controller.enableController();
+        this.playArea.setUp(this.size);
+    }
+
+    setSize(size) {
+        this.size = size;
+        this.resetGame();
+    }
+
+    undoLastMove() {
+        this.score -= this.lastValue;
+        this.lastValue = 0;
+        this.playArea.undoLastMove();
+        document.getElementById('score').innerText = this.score;
     }
 
     gameOver() {
