@@ -136,7 +136,7 @@ export class PlayArea {
                     context.fillStyle = this.board[j][i].color;
                     context.fillRect(x, y, tileSize, tileSize);
 
-                    context.font = this.board[j][i].fontHeight + 'px Arial';
+                    context.font = this.board[j][i].fontHeight + 'px Source Sans Pro';
                     context.textAlign = 'center';
                     context.fillStyle = 'black';
                     context.textBaseline = 'middle';
@@ -256,7 +256,7 @@ export class PlayArea {
         for (let i = 0; i < cleanedLine.length - 1; ++i) {
             if (cleanedLine[i] != null && cleanedLine[i + 1] != null) {
                 if (cleanedLine[i].value == cleanedLine[i + 1].value) {
-                    let victory = cleanedLine[i].merge();
+                    let victory = cleanedLine[i].merge() == Math.pow(2, (this.size * 3 - 1));
 
                     if (victory) {
                         this.dispatchVictory();

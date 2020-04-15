@@ -6,7 +6,7 @@ export class Game {
     constructor() {
         this.score = 0;
         this.lastValue = 0;
-        this.size = 4;
+        this.size = 2;
         this.saveTimeout = null;
         this.storage = new Storage();
         this.won = false;
@@ -35,10 +35,20 @@ export class Game {
             event.preventDefault();
         });
 
+        document.getElementById('game-over-restart').addEventListener('click', (event) => {
+            this.resetGame();
+            event.preventDefault();
+        });
+
         document.getElementById('undo').addEventListener('click', (event) => {
             this.undoLastMove();
             event.preventDefault();
         });
+
+        document.getElementById('victory').addEventListener('click', (event) => {
+            document.getElementById('victory').style.display = 'none';
+            event.preventDefault();
+        })
     }
 
     /**
@@ -103,7 +113,12 @@ export class Game {
      * Also removes saved data.
      */
     resetGame() {
+        document.getElementById('victory').style.display = 'none';
+        document.getElementById('game-over').style.display = 'none';
+
         this.score = 0;
+        this.lost = false;
+        this.won = false;
         document.getElementById('score').innerText = this.score;
 
         this.storage.removeItem('board');
@@ -134,9 +149,10 @@ export class Game {
      */
     gameOver() {
         if (!this.lost) {
-            this.storage.removeItem('board');
+            document.getElementById('game-over').style.display = 'flex';
             document.getElementById('game-over').style.opacity = '100%';
             this.lost = true;
+            this.storage.removeItem('board');
         }
     }
 
@@ -145,6 +161,8 @@ export class Game {
      */
     victory() {
         if (!this.won) {
+            document.getElementById('victory-value').innerText = Math.pow(2, (this.size * 3 - 1));
+            document.getElementById('victory').style.display = 'flex';
             document.getElementById('victory').style.opacity = '100%';
             this.won = true;
         }
