@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,19 +7,58 @@
 
     <link rel="stylesheet" href="./css/base.css">
 </head>
+
 <body>
     <nav>
-        <button id="reset">Reset</button>
-        <button id="change-size">Change Board Size</button>
-        <button id="undo">Undo</button>
+        <li>
+            <a id="highscores">Highscores</a>
+        </li>
+        <li>
+            <a id="about">About</a>
+        </li>
+        <li>
+            <a id="reset">Reset</a>
+        </li>
+        <li>
+            <a id="change-size">Change Board Size</a>
+        </li>
+        <li>
+            <span>Score: <b id="score"></b></span>
+        </li>
+        <li>
+            <a id="undo">Undo</a>
+        </li>
     </nav>
 
-    <h1>2048JS</h1>
+    <article id="warning">You need to have JavaScript enabled to play this game. Please enable it and reload the site or
+        use different browser.</article>
 
-    <p id="score"></p>
-    <article id="warning">You need to have JavaScript enabled to play this game. Please enable it and reload the site or use different browser.</article>
-    <canvas id="game-area"></canvas>
+    <div id="area-wrapper">
+        <canvas id="game-area"></canvas>
+
+        <div class="overlay" id="game-over">
+            <h1>Game Over</h1>
+            <div id="save-score">
+                <p>Would you like to save your score?</p>
+
+                <form>
+                    <label for="username">What is your name?
+                        <input type="text" id="username" name="username">
+                    </label>
+                    <button type="submit">Save the Score</button>
+                </form>
+
+                <button id="game-over-restart">Start Again</button>
+            </div>
+        </div>
+
+        <div class="overlay" id="victory">
+            <h1>You Have Achieved 2048</h1>
+            <button id="continue">Continue</button>
+        </div>
+    </div>
 
     <script type="module" src="./js/index.js"></script>
 </body>
+
 </html>
