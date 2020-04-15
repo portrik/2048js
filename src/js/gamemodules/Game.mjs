@@ -6,7 +6,7 @@ export class Game {
     constructor() {
         this.score = 0;
         this.lastValue = 0;
-        this.size = 2;
+        this.size = 4;
         this.saveTimeout = null;
         this.storage = new Storage();
         this.won = false;
