@@ -9,36 +9,73 @@ export class Game {
         this.size = 4;
         this.saveTimeout = null;
         this.storage = new Storage();
+        this.won = false;
+        this.lost = false;
     }
 
+    /**
+     * Loads default values and initializes PlayArea, Controller and event listeners.
+     * If localStorage save exists, default values are overwritten.
+     * @param playArea - HTML Canvas element
+     */
     setUpGame(playArea) {
         this.setUpController(playArea);
         this.playArea = new PlayArea(playArea);
 
-        let localData = this.storage.loadBoard();
+        this.loadLocalData();
+
+        document.getElementById('score').innerText = this.score;
+
+        playArea.addEventListener('gameOver', () => this.gameOver());
+        playArea.addEventListener('victory', () => this.victory());
+        playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value));
+
+        document.getElementById('reset').addEventListener('click', (event) => {
+            this.resetGame();
+            event.preventDefault();
+        });
+
+        document.getElementById('undo').addEventListener('click', (event) => {
+            this.undoLastMove();
+            event.preventDefault();
+        });
+    }
+
+    /**
+     * Hooks Controller on the PlayArea.
+     * @param playArea - HTML Canvas element
+     */
+    setUpController(playArea) {
+        this.controller = new Controller(playArea);
+
+        playArea.addEventListener('moveGameBoard', (event) => { 
+            if (!this.lost) {
+                this.playArea.moveTiles(event.detail.direction); 
+            }
+        });
+    }
+
+    /**
+     * Loads saved data if localStorage is working and data exist.
+     */
+    loadLocalData() {
+        let localData = this.storage.loadItem('board');
 
         if (localData) {
             this.score = localData["score"];
             this.size = localData["board"].length;
+            this.won = localData["won"];
             this.playArea.setBoard(localData["board"]);
         }
         else {
             this.playArea.setUp(this.size);
         }
-
-        document.getElementById('score').innerText = this.score;
-           
-        playArea.addEventListener('gameOver', () => this.gameOver());
-        playArea.addEventListener('victory', () => this.victory());
-        playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value)); 
     }
 
-    setUpController(playArea) {
-        this.controller = new Controller(playArea);
-
-        playArea.addEventListener('moveGameBoard', (event) => this.playArea.moveTiles(event.detail.direction));
-    }
-
+    /**
+     * Updates the score with the value from a merged Tile.
+     * @param value - Value of the merged Tile.
+     */
     updateScore(value) {
         this.lastValue = value;
         this.score += value;
@@ -50,20 +87,41 @@ export class Game {
             this.saveTimeout = null;
         }
 
-        this.saveTimeout = setTimeout(() => this.storage.storeBoard(this.playArea.board, this.score), 2000);
+        this.saveTimeout = setTimeout(() => {
+            let saveData = {
+                'board': this.playArea.board,
+                'score': this.score,
+                'won': this.won,
+            };
+
+            this.storage.storeItem('board', saveData);
+        }, 2000);
     }
 
+    /**
+     * Resets the game to the default state.
+     * Also removes saved data.
+     */
     resetGame() {
         this.score = 0;
-        this.controller.enableController();
+        document.getElementById('score').innerText = this.score;
+
+        this.storage.removeItem('board');
         this.playArea.setUp(this.size);
     }
 
+    /**
+     * Resize the board to a new size.
+     * @param size - New size of the board.
+     */
     setSize(size) {
         this.size = size;
         this.resetGame();
     }
 
+    /**
+     * Reverts to a previous state.
+     */
     undoLastMove() {
         this.score -= this.lastValue;
         this.lastValue = 0;
@@ -71,12 +129,24 @@ export class Game {
         document.getElementById('score').innerText = this.score;
     }
 
+    /**
+     * Ends the game.
+     */
     gameOver() {
-        this.controller.disableController();
-        console.log('Game over');
+        if (!this.lost) {
+            this.storage.removeItem('board');
+            document.getElementById('game-over').style.opacity = '100%';
+            this.lost = true;
+        }
     }
 
+    /**
+     * Announces victory and opens modal with the option to play on.
+     */
     victory() {
-        console.log('Victory');
+        if (!this.won) {
+            document.getElementById('victory').style.opacity = '100%';
+            this.won = true;
+        }
     }
 }

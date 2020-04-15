@@ -10,6 +10,4 @@ const game = new Game();
     warning.parentNode.removeChild(warning);
 
     game.setUpGame(document.getElementById('game-area'));
-    document.getElementById('reset').addEventListener('click', () => game.resetGame());
-    document.getElementById('undo').addEventListener('click', () => game.undoLastMove());
 })();

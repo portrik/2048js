@@ -41,16 +41,6 @@ export class Controller {
     }
 
     /**
-     * Disables controller listening for inputs.
-     */
-    disableController() {
-        document.removeEventListener('keydown', (event) => this.handleKeydown(event));
-        
-        this.targetElement.removeEventListener('touchstart', (event) => this.handleTouchStart(event));
-        this.targetElement.removeEventListener('touchend', (event) => this.handleTouchEnd(event));
-    }
-
-    /**
      * Dispatches move event on this.targetElement if key pressed is present in this.keyCodes.
      * Handles arrow keys and WASD input.
      * @param event - keyDown event
