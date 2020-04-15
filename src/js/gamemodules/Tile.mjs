@@ -23,7 +23,7 @@ export class Tile {
         this.value *= 2;
         this.color = this.colors[this.value];
 
-        return this.value == 2048;
+        return this.value;
     }
 
     toString() {
