@@ -15,6 +15,7 @@ export class Tile {
         };
 
         this.value = value;
+        this.fontHeight = 80;
         this.color = this.colors[this.value];
     }
 

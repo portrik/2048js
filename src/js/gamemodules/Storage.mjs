@@ -1,5 +1,5 @@
 export class Storage {
-    constructor () {
+    constructor() {
         this.isUsable = this.checkAvailability();
     }
 
@@ -16,7 +16,7 @@ export class Storage {
 
             result = true;
         }
-        catch(e) {
+        catch (e) {
             result = false;
         }
 
@@ -24,33 +24,39 @@ export class Storage {
     }
 
     /**
-     * Stores game information to localStorage in JSON format.
-     * @param board - Board with Tiles
-     * @param score - Current score
+     * Saves an item in the local storage
+     * @param name - Name of the item
+     * @param value - Value of the item
      */
-    storeBoard(board, score) {
-        if (this.isUsable){
-            let convertedBoard =  {
-                'score': score,
-                'board': board,
-            };
-
-            localStorage.setItem('board', JSON.stringify(convertedBoard));
+    storeItem(name, value) {
+        if (this.isUsable) {
+            localStorage.setItem(name, JSON.stringify(value));
         }
     }
 
     /**
-     * Loads game information from localStorage.
+     * Loads an item from the local storage
+     * @param name - Name of the item
      */
-    loadBoard() {
+    loadItem(name) {
         let result = null;
 
         if (this.isUsable) {
-            let storedBoard = localStorage.getItem('board');
+            let storedBoard = localStorage.getItem(name);
 
-            result =  JSON.parse(storedBoard);
+            result = JSON.parse(storedBoard);
         }
 
         return result;
+    }
+
+    /**
+     * Removes an item from the local storage
+     * @param name - Name of the item
+     */
+    removeItem(name) {
+        if (this.isUsable) {
+            localStorage.removeItem(name);
+        }
     }
 }

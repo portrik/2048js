@@ -13,25 +13,6 @@ export class PlayArea {
         window.addEventListener('resize', () => this.resizeArea());
     }
 
-    setBoard(board) {
-        this.size = board.length;
-        
-        for (let i = 0; i < this.size; ++i) {
-            this.board[i] = [];
-
-            for (let j = 0; j < board[i].length; ++j) {
-                if (board[i][j]) {
-                    this.board[i][j] = new Tile(board[i][j].value);
-                }
-                else {
-                    this.board[i][j] = null;
-                }
-            }
-        }
-
-        this.drawBoard();
-    }
-
     /**
      * Resizes the game area according to window size.
      */
@@ -40,11 +21,11 @@ export class PlayArea {
         let height = window.innerHeight;
 
         if (width > height) {
-            height = Math.round(height * 0.9);
+            height = Math.round(height * 0.85);
             width = height;
         }
         else {
-            width = Math.round(width * 0.9);
+            width = Math.round(width * 0.85);
             height = width;
         }
 
@@ -76,6 +57,32 @@ export class PlayArea {
         this.drawBoard();
     }
 
+    /**
+     * Changes the board to the saved one
+     * @param board - Saved board from localStorage
+     */
+    setBoard(board) {
+        this.size = board.length;
+        
+        for (let i = 0; i < this.size; ++i) {
+            this.board[i] = [];
+
+            for (let j = 0; j < board[i].length; ++j) {
+                if (board[i][j]) {
+                    this.board[i][j] = new Tile(board[i][j].value);
+                }
+                else {
+                    this.board[i][j] = null;
+                }
+            }
+        }
+
+        this.drawBoard();
+    }
+
+    /**
+     * Resets board to the previous state and clears the previous state.
+     */
     undoLastMove() {
         if (this.previousState) {
             this.board = this.copy2DArray(this.previousState);
@@ -83,25 +90,6 @@ export class PlayArea {
             this.previousState = null;
             this.drawBoard();
         }
-    }
-
-    copy2DArray(source) {
-        let result = [];
-
-        for (let i = 0; i < source.length; ++i) {
-            result[i] = [];
-
-            for (let j = 0; j < source[i].length; ++j) {
-                if (source[i][j]) {
-                    result[i][j] = new Tile(source[i][j].value);
-                }
-                else {
-                    result[i][j] = null;
-                }
-            }
-        }
-
-        return result;
     }
 
     /**
@@ -128,16 +116,18 @@ export class PlayArea {
         this.drawBoard();
     }
 
-    // TODO: Make margin of sides fixed value 
+    /**
+     * Renders the contents of the board into the Canvas HTML element.
+     */
     drawBoard() {
-        let tileSize = Math.round(this.width / (this.size + 1));
-        let margin = Math.round(tileSize / (this.size + 1));
+        let margin = 10;
+        let tileSize = Math.round((this.width - margin * (this.size - 1)) / this.size);
 
         let context = this.area.getContext('2d');
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
-        let x = margin;
-        let y = margin;
+        let x = 0;
+        let y = 0;
 
         for (let j = 0; j < this.size; ++j) {
             for (let i = 0; i < this.size; ++i) {
@@ -146,7 +136,7 @@ export class PlayArea {
                     context.fillStyle = this.board[j][i].color;
                     context.fillRect(x, y, tileSize, tileSize);
 
-                    context.font = '80px Arial';
+                    context.font = this.board[j][i].fontHeight + 'px Arial';
                     context.textAlign = 'center';
                     context.fillStyle = 'black';
                     context.textBaseline = 'middle';
@@ -163,7 +153,7 @@ export class PlayArea {
                 x += tileSize + margin;
             }
 
-            x = margin;
+            x = 0;
             y += tileSize + margin;
         }
     }
@@ -175,6 +165,11 @@ export class PlayArea {
         this.area.dispatchEvent(new Event('victory'));
     }
 
+    /**
+     * Spawns a new Tile on a random available space.
+     * Has a chance to spawn a tile with value of 4.
+     * @param availableSpaces - Array of available positions for new Tile
+     */
     spawnTile(availableSpaces) {
         let position = Math.round(Math.random() * (availableSpaces.length - 1));
         let x = availableSpaces[position][0];
@@ -191,8 +186,8 @@ export class PlayArea {
     }
 
     /**
-     * Checks if it is still possible to play on.
-     * Spawns new Tile if enabled and available spaces exist.
+     * Checks if it is still possible to continue playing.
+     * Spawns a new Tile if enabled and available spaces exist.
      * @param canSpawn - Spawn enabler
      */
     checkBoard(canSpawn) {
@@ -212,13 +207,17 @@ export class PlayArea {
         else if (availableSpaces.length == 0) {
             let canMove = false;
 
-            for (let i = 0; i < this.size - 1; ++i) {
+            for (let i = 0; i < this.size; ++i) {
                 for (let j = 0; j < this.size - 1; ++j) {
-                    if (this.board[i][j].value == this.board[i + 1][j].value) {
+                    if (this.board[i][j].value == this.board[i][j + 1].value) {
                         canMove = true;
                     }
+                }
+            }
 
-                    if (this.board[i][j].value == this.board[i][j + 1].value) {
+            for (let i = 0; i < this.size - 1; ++i) {
+                for (let j = 0; j < this.size; ++j) {
+                    if (this.board[i][j].value == this.board[i + 1][j].value) {
                         canMove = true;
                     }
                 }
@@ -372,5 +371,29 @@ export class PlayArea {
                 this.board.reverse();
                 break;
         }
+    }
+
+    /**
+     * Returns a copy of the board or previous state.
+     * Tiles are recreated.
+     * @param source - source 2D array
+     */
+    copy2DArray(source) {
+        let result = [];
+
+        for (let i = 0; i < source.length; ++i) {
+            result[i] = [];
+
+            for (let j = 0; j < source[i].length; ++j) {
+                if (source[i][j]) {
+                    result[i][j] = new Tile(source[i][j].value);
+                }
+                else {
+                    result[i][j] = null;
+                }
+            }
+        }
+
+        return result;
     }
 }
