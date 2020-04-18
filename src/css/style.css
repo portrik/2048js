@@ -1,3 +1,5 @@
+/* Site-wide styles */
+
 html, body {
     margin: 0;
     padding: 0;
@@ -13,24 +15,55 @@ body {
 }
 
 div {
-    border-radius: 30px;
-}
-
-nav {
-    top: 0;
-    width: 100%;
-    height: 70px;
+    border-radius: 15px;
 }
 
 ul {
     list-style-type: none;
     padding: 0;
-}
-
-nav ul {
     display: flex;
     justify-content: space-around;
     flex-direction: row;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+button {
+    border-radius: 5px;
+    border: 1px solid #bbada0;
+    background-color: #bbada0;
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+label {
+    cursor: pointer;
+}
+
+input[type="text"] {
+    margin: auto;
+    background-color: #bbada0;
+    color: #faf8ef;
+    font-size: 1rem;
+    border: 0;
+}
+/* --------------------------- */
+
+/* Menu bar */
+
+nav {
+    top: 0;
+    width: 100%;
+    height: 70px;
 }
 
 nav li {
@@ -43,54 +76,20 @@ nav li a {
     text-emphasis: bold;
 }
 
-span {
-    display: inline;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.overlay {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    opacity: 0%;
-    transition: opacity 3s ease-in;
-}
-
-.overlay-content {
-    background-color: #faf8ef;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 60%;
-    margin: auto;
-    padding: 40px;
+nav>ul>li>span {
+    border-radius: 15px;
+    border: 2px solid #bbada0;
+    padding: 10px;
 }
 
 .secondary {
     display: none;
 }
 
-.modal {
-    background-color: #faf8ef;
-}
-
 @media screen and (min-width: 768px) {
     .secondary {
         display: inline;
     }
-
     .navbar-toggle {
         display: none;
     }
@@ -118,15 +117,114 @@ form {
     margin-top: auto;
 }
 
+/* --------------------------- */
+
+/* Game overlays - Loss and Victory */
+
+.overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0%;
+    transition: opacity 3s ease-in;
+}
+
+.overlay-content {
+    background-color: #faf8ef;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    margin: auto;
+    padding: 40px;
+}
+
 #game-over {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     display: none;
+}
+
+#game-over form {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#game-over input {
+    margin-bottom: 15px;
 }
 
 #victory {
     background-color: rgba(255, 252, 103, 0.5);
     display: none;
 }
+
+/* --------------------------- */
+
+/* Modals */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    margin: auto;
+    min-width: 300px;
+    background-color: #faf8ef;
+    transform: scale(0);
+    transition: all 0.5s ease-in-out;
+    padding: 30px;
+}
+
+.modal-content em {
+    text-align: center;
+    width: 90%;
+}
+
+.modal-content ul {
+    justify-content: space-between;
+}
+
+.modal-content li {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+/* --------------------------- */
+
+/* Game Area */
 
 #area-wrapper {
     display: flex;
@@ -145,3 +243,5 @@ form {
     margin: auto;
     display: block;
 }
+
+/* --------------------------- */

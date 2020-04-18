@@ -11,6 +11,7 @@ export class Game {
         this.storage = new Storage();
         this.won = false;
         this.lost = false;
+        this.highscores = {};
     }
 
     /**
@@ -29,26 +30,31 @@ export class Game {
         playArea.addEventListener('gameOver', () => this.gameOver());
         playArea.addEventListener('victory', () => this.victory());
         playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value));
-
-        document.getElementById('reset').addEventListener('click', (event) => {
+        playArea.addEventListener('resize', () => {
+            this.setSize(event.detail.size);
             this.resetGame();
-            event.preventDefault();
         });
 
-        document.getElementById('game-over-restart').addEventListener('click', (event) => {
-            this.resetGame();
+        document.getElementById('reset').addEventListener('click', (event) => {
             event.preventDefault();
+            this.resetGame();
         });
 
         document.getElementById('undo').addEventListener('click', (event) => {
-            this.undoLastMove();
             event.preventDefault();
+            this.undoLastMove();
         });
 
         document.getElementById('victory').addEventListener('click', (event) => {
-            document.getElementById('victory').style.display = 'none';
             event.preventDefault();
-        })
+            document.getElementById('victory').style.display = 'none';
+        });
+
+        document.forms["can-submit-score"].addEventListener('submit', (event) => {
+            event.preventDefault();
+            this.saveScore();
+            document.getElementById('game-over').style.display = 'none';
+        });
     }
 
     /**
@@ -80,6 +86,13 @@ export class Game {
         else {
             this.playArea.setUp(this.size);
         }
+
+        localData = this.storage.loadItem('highscores');
+
+        if (localData) {
+            this.highscores = localData;
+            this.updateHighscoresTable();
+        }
     }
 
     /**
@@ -110,7 +123,7 @@ export class Game {
 
     /**
      * Resets the game to the default state.
-     * Also removes saved data.
+     * Also removes ovewrites save data with a new state.
      */
     resetGame() {
         document.getElementById('victory').style.display = 'none';
@@ -121,8 +134,15 @@ export class Game {
         this.won = false;
         document.getElementById('score').innerText = this.score;
 
-        this.storage.removeItem('board');
         this.playArea.setUp(this.size);
+
+        let saveData = {
+            'board': this.playArea.board,
+            'score': this.score,
+            'won': this.won,
+        };
+
+        this.storage.storeItem('board', saveData);
     }
 
     /**
@@ -149,9 +169,26 @@ export class Game {
      */
     gameOver() {
         if (!this.lost) {
+            let hasHigherScore = 'hidden';
+            let currentHighscores = [];
+            this.lost = true;
+
+            if (!this.highscores[this.size]) {
+                this.highscores[this.size] = [];
+            }
+
+            currentHighscores = this.highscores;
+
+            if (currentHighscores.length < 10) {
+                hasHigherScore = 'flex';
+            }
+            else if (currentHighscores[currentHighscores.length - 1] < this.score) {
+                hasHigherScore = 'flex';
+            }
+
+            document.getElementById('can-submit-score').style.display = hasHigherScore;
             document.getElementById('game-over').style.display = 'flex';
             document.getElementById('game-over').style.opacity = '100%';
-            this.lost = true;
             this.storage.removeItem('board');
         }
     }
@@ -166,5 +203,67 @@ export class Game {
             document.getElementById('victory').style.opacity = '100%';
             this.won = true;
         }
+    }
+
+    saveScore() {
+        let newScore = {
+            name: document.forms["can-submit-score"][0].value,
+            score: this.score,
+        };
+
+        if (this.highscores[this.size].length > 9) {
+            this.highscores[this.size].pop();
+        }
+
+        this.highscores[this.size].push(newScore);
+        this.highscores[this.size].sort((a, b) => (a.score > b.score) ? 1 : -1);
+
+        this.storage.storeItem('highscores', this.highscores);
+
+        this.updateHighscoresTable();
+        this.resetGame();
+    }
+
+    updateHighscoresTable() {
+        let keys = Object.keys(this.highscores);
+        let targetElement = document.getElementById('scores-area');
+        targetElement.innerHTML = '';
+
+        keys.forEach(key => {
+            let wrapper = document.createElement('div');
+            let heading = document.createElement('h3');
+            heading.innerText = 'Scores for Board Size ' + key;
+            wrapper.appendChild(heading);
+
+            let table = document.createElement('table');
+            wrapper.appendChild(table);
+
+            let header = document.createElement('tr');
+            table.appendChild(header);
+
+            let player = document.createElement('th');
+            player.innerText = 'Player';
+            header.appendChild(player);
+
+            let score = document.createElement('th');
+            score.innerText = 'Score';            
+            header.appendChild(score);
+
+            this.highscores[key].forEach((player) => {
+                let newRow = document.createElement('tr');
+
+                let rowName = document.createElement('td');
+                rowName.innerText = player.name;
+                newRow.appendChild(rowName);
+
+                let rowScore = document.createElement('td');
+                rowScore.innerText = player.score;
+                newRow.appendChild(rowScore);
+
+                table.appendChild(newRow);
+            });
+
+            targetElement.appendChild(wrapper);
+        });
     }
 }

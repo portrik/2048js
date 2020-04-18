@@ -4,6 +4,11 @@ export class PlayArea {
     constructor(area) {
         this.chance = 0.1;
         this.area = area;
+
+        // Adds function for drawing rounded rectangles into PlayArea context
+        this.context = area.getContext('2d');
+        this.context.drawRoundedRect = drawRoundedRect;
+
         this.resizeArea();
         this.size = 0;
         this.board = [];
@@ -32,9 +37,8 @@ export class PlayArea {
         this.width = width;
         this.height = height;
 
-        let context = this.area.getContext('2d');
-        context.canvas.width = width;
-        context.canvas.height = height;
+        this.context.canvas.width = width;
+        this.context.canvas.height = height;
 
         this.drawBoard();
     }
@@ -63,7 +67,7 @@ export class PlayArea {
      */
     setBoard(board) {
         this.size = board.length;
-        
+
         for (let i = 0; i < this.size; ++i) {
             this.board[i] = [];
 
@@ -120,34 +124,38 @@ export class PlayArea {
      * Renders the contents of the board into the Canvas HTML element.
      */
     drawBoard() {
-        let margin = 10;
+        let margin = Math.round(32 / this.size);
         let tileSize = Math.round((this.width - margin * (this.size - 1)) / this.size);
 
-        let context = this.area.getContext('2d');
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 
         let x = 0;
         let y = 0;
 
-        for (let j = 0; j < this.size; ++j) {
-            for (let i = 0; i < this.size; ++i) {
+        for (let i = 0; i < this.size; ++i) {
+            for (let j = 0; j < this.size; ++j) {
 
-                if (this.board[j][i]) {
-                    context.fillStyle = this.board[j][i].color;
-                    context.fillRect(x, y, tileSize, tileSize);
+                if (this.board[i][j]) {
+                    this.context.drawRoundedRect(x, y, tileSize, tileSize, this.board[i][j].color, this.size);
+                    let limiter = 0;
 
-                    context.font = this.board[j][i].fontHeight + 'px Source Sans Pro';
-                    context.textAlign = 'center';
-                    context.fillStyle = 'black';
-                    context.textBaseline = 'middle';
+                    if (this.board[i][j] > 8192) {
+                        limiter = Math.log2(this.board[i][j].value) - Math.log2(8192);
+                    }
+
+                    this.context.font = Math.round(256 / this.size) + 'px Arial';
+                    this.context.textAlign = 'center';
+                    this.context.textBaseline = 'middle';
+                    this.context.fillStyle = this.board[i][j].fontColor;
                     let textX = x + Math.round(tileSize / 2);
-                    let textY = y + Math.round(tileSize / 2) + 10;
 
-                    context.fillText(this.board[j][i].value, textX, textY);
+                    // Text does not feel centered without the 5 % of tileSize included
+                    let textY = y + Math.round(tileSize / 2) + Math.round(tileSize * 0.05);
+
+                    this.context.fillText(this.board[i][j].value, textX, textY);
                 }
                 else {
-                    context.fillStyle = 'rgba(238, 228, 218, 0.35)';
-                    context.fillRect(x, y, tileSize, tileSize);
+                    this.context.drawRoundedRect(x, y, tileSize, tileSize, 'rgba(238, 228, 218, 0.35)', this.size);
                 }
 
                 x += tileSize + margin;
@@ -396,4 +404,43 @@ export class PlayArea {
 
         return result;
     }
+}
+
+/**
+ * Canvas 2D Context function to draw a rounded rectangle.
+ * Heavily inspired by https://newfivefour.com/javascript-canvas-rounded-rectangle.html
+ * @param x 
+ * @param y 
+ * @param width 
+ * @param height 
+ * @param fill - Color of the rectangle
+ * @param size - Size of the board. Used to calculate rounded corner
+ */
+function drawRoundedRect(x, y, width, height, fill, size) {
+    const halfCircle = (2 * Math.PI) / 2;
+    const quarterCircle = (2 * Math.PI) / 4;
+    const rounded = 32 / size;
+
+    this.beginPath();
+
+    // Left side
+    this.arc(rounded + x, rounded + y, rounded, -quarterCircle, halfCircle, true);
+    this.lineTo(x, y + height - rounded);
+    this.arc(rounded + x, height - rounded + y, rounded, halfCircle, quarterCircle, true);
+
+    // Bottom side
+    this.lineTo(x + width - rounded, y + height);
+    this.arc(x + width - rounded, y + height - rounded, rounded, quarterCircle, 0, true);
+
+    // Right side
+    this.lineTo(x + width, y + rounded);
+    this.arc(x + width - rounded, y + rounded, rounded, 0, -quarterCircle, true);
+
+    // Top side
+    this.lineTo(x + rounded, y);
+
+    this.closePath();
+
+    this.fillStyle = fill;
+    this.fill();
 }
