@@ -4,8 +4,11 @@ export class PlayArea {
     constructor(area) {
         this.chance = 0.1;
         this.area = area;
+
+        // Adds function for drawing rounded rectangles into PlayArea context
         this.context = area.getContext('2d');
         this.context.drawRoundedRect = drawRoundedRect;
+
         this.resizeArea();
         this.size = 0;
         this.board = [];
@@ -404,6 +407,7 @@ export class PlayArea {
  * @param width 
  * @param height 
  * @param fill - Color of the rectangle
+ * @param size - Size of the board. Used to calculate rounded corner
  */
 function drawRoundedRect(x, y, width, height, fill, size) {
     const halfCircle = (2 * Math.PI) / 2;

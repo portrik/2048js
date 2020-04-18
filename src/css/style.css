@@ -1,3 +1,4 @@
+/* Site-wide styles */
 html, body {
     margin: 0;
     padding: 0;
@@ -16,32 +17,12 @@ div {
     border-radius: 15px;
 }
 
-nav {
-    top: 0;
-    width: 100%;
-    height: 70px;
-}
-
 ul {
     list-style-type: none;
     padding: 0;
     display: flex;
     justify-content: space-around;
     flex-direction: row;
-}
-
-nav li {
-    text-align: center;
-    margin: auto;
-}
-
-nav li a {
-    cursor: pointer;
-    text-emphasis: bold;
-}
-
-span {
-    display: inline;
 }
 
 form {
@@ -61,86 +42,27 @@ button {
     margin: 5px;
     cursor: pointer;
 }
+/* --------------------------- */
 
-.overlay {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+/* Menu bar */
+nav {
     top: 0;
-    left: 0;
-    z-index: 2;
-    opacity: 0%;
-    transition: opacity 3s ease-in;
+    width: 100%;
+    height: 70px;
 }
 
-.overlay-content {
-    background-color: #faf8ef;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 60%;
+nav li {
+    text-align: center;
     margin: auto;
-    padding: 40px;
+}
+
+nav li a {
+    cursor: pointer;
+    text-emphasis: bold;
 }
 
 .secondary {
     display: none;
-}
-
-.modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    padding: 16px;
-    box-sizing: border-box;
-    z-index: 99;
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-.modal-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column;
-    margin: auto;
-    min-width: 300px;
-    background-color: #faf8ef;
-    transform: scale(0);
-    transition: all 1s ease-in-out;
-}
-
-.modal-content em {
-    text-align: center;
-    width: 90%;
-}
-
-.modal-content ul {
-    justify-content: space-between;
-}
-
-.modal-content li {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.form-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
 }
 
 @media screen and (min-width: 768px) {
@@ -173,6 +95,34 @@ button {
 #close-menu {
     margin-top: auto;
 }
+/* --------------------------- */
+
+/* Game overlays - Loss and Victory */
+.overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0%;
+    transition: opacity 3s ease-in;
+}
+
+.overlay-content {
+    background-color: #faf8ef;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    margin: auto;
+    padding: 40px;
+}
 
 #game-over {
     background-color: rgba(0, 0, 0, 0.5);
@@ -183,7 +133,62 @@ button {
     background-color: rgba(255, 252, 103, 0.5);
     display: none;
 }
+/* --------------------------- */
 
+/* Modals */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    margin: auto;
+    min-width: 300px;
+    background-color: #faf8ef;
+    transform: scale(0);
+    transition: all 0.5s ease-in-out;
+}
+
+.modal-content em {
+    text-align: center;
+    width: 90%;
+}
+
+.modal-content ul {
+    justify-content: space-between;
+}
+
+.modal-content li {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+/* --------------------------- */
+
+/* Game Area */
 #area-wrapper {
     display: flex;
     position: relative;
@@ -201,3 +206,4 @@ button {
     margin: auto;
     display: block;
 }
+/* --------------------------- */
