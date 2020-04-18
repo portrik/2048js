@@ -137,13 +137,20 @@ export class PlayArea {
 
                 if (this.board[i][j]) {
                     this.context.drawRoundedRect(x, y, tileSize, tileSize, this.board[i][j].color, this.size);
+                    let limiter = 0;
 
-                    this.context.font = this.board[i][j].fontHeight + 'px Arial';
+                    if (this.board[i][j] > 8192) {
+                        limiter = Math.log2(this.board[i][j].value) - Math.log2(8192);
+                    }
+
+                    this.context.font = Math.round(256 / this.size) + 'px Arial';
                     this.context.textAlign = 'center';
-                    this.context.fillStyle = this.board[i][j].fontColor;
                     this.context.textBaseline = 'middle';
+                    this.context.fillStyle = this.board[i][j].fontColor;
                     let textX = x + Math.round(tileSize / 2);
-                    let textY = y + Math.round(tileSize / 2) + 10;
+
+                    // Text does not feel centered without the 5 % of tileSize included
+                    let textY = y + Math.round(tileSize / 2) + Math.round(tileSize * 0.05);
 
                     this.context.fillText(this.board[i][j].value, textX, textY);
                 }

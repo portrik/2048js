@@ -1,4 +1,5 @@
 /* Site-wide styles */
+
 html, body {
     margin: 0;
     padding: 0;
@@ -41,10 +42,24 @@ button {
     display: inline-block;
     margin: 5px;
     cursor: pointer;
+    padding: 10px;
+}
+
+label {
+    cursor: pointer;
+}
+
+input[type="text"] {
+    margin: auto;
+    background-color: #bbada0;
+    color: #faf8ef;
+    font-size: 1rem;
+    border: 0;
 }
 /* --------------------------- */
 
 /* Menu bar */
+
 nav {
     top: 0;
     width: 100%;
@@ -59,6 +74,12 @@ nav li {
 nav li a {
     cursor: pointer;
     text-emphasis: bold;
+}
+
+nav>ul>li>span {
+    border-radius: 15px;
+    border: 2px solid #bbada0;
+    padding: 10px;
 }
 
 .secondary {
@@ -95,9 +116,11 @@ nav li a {
 #close-menu {
     margin-top: auto;
 }
+
 /* --------------------------- */
 
 /* Game overlays - Loss and Victory */
+
 .overlay {
     position: absolute;
     display: flex;
@@ -129,10 +152,21 @@ nav li a {
     display: none;
 }
 
+#game-over form {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#game-over input {
+    margin-bottom: 15px;
+}
+
 #victory {
     background-color: rgba(255, 252, 103, 0.5);
     display: none;
 }
+
 /* --------------------------- */
 
 /* Modals */
@@ -163,6 +197,7 @@ nav li a {
     background-color: #faf8ef;
     transform: scale(0);
     transition: all 0.5s ease-in-out;
+    padding: 30px;
 }
 
 .modal-content em {
@@ -186,9 +221,11 @@ nav li a {
     justify-content: space-between;
     margin-bottom: 10px;
 }
+
 /* --------------------------- */
 
 /* Game Area */
+
 #area-wrapper {
     display: flex;
     position: relative;
@@ -206,4 +243,5 @@ nav li a {
     margin: auto;
     display: block;
 }
+
 /* --------------------------- */
