@@ -21,7 +21,7 @@
     "2048",
     "webpack"
   ],
-  "author": "Patrik Dvořáček",
+  "author": "Patrik Dvořáček <patrik@dvoracek.dev> (https://dvoracek.dev)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tehSIRius/2048js/issues"

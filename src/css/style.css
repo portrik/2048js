@@ -13,7 +13,7 @@ body {
 }
 
 div {
-    border-radius: 30px;
+    border-radius: 15px;
 }
 
 nav {
@@ -25,9 +25,6 @@ nav {
 ul {
     list-style-type: none;
     padding: 0;
-}
-
-nav ul {
     display: flex;
     justify-content: space-around;
     flex-direction: row;
@@ -50,6 +47,19 @@ span {
 form {
     display: flex;
     flex-direction: column;
+    width: 80%;
+}
+
+button {
+    border-radius: 5px;
+    border: 1px solid #bbada0;
+    background-color: #bbada0;
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
 }
 
 .overlay {
@@ -83,14 +93,60 @@ form {
 }
 
 .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    margin: auto;
+    min-width: 300px;
     background-color: #faf8ef;
+    transform: scale(0);
+    transition: all 1s ease-in-out;
+}
+
+.modal-content em {
+    text-align: center;
+    width: 90%;
+}
+
+.modal-content ul {
+    justify-content: space-between;
+}
+
+.modal-content li {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 @media screen and (min-width: 768px) {
     .secondary {
         display: inline;
     }
-
     .navbar-toggle {
         display: none;
     }
@@ -119,7 +175,7 @@ form {
 }
 
 #game-over {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     display: none;
 }
 

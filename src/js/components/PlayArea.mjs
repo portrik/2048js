@@ -120,7 +120,7 @@ export class PlayArea {
      * Renders the contents of the board into the Canvas HTML element.
      */
     drawBoard() {
-        let margin = 10;
+        let margin = Math.round(32 / this.size);
         let tileSize = Math.round((this.width - margin * (this.size - 1)) / this.size);
 
         let context = this.area.getContext('2d');
@@ -136,9 +136,9 @@ export class PlayArea {
                     context.fillStyle = this.board[j][i].color;
                     context.fillRect(x, y, tileSize, tileSize);
 
-                    context.font = this.board[j][i].fontHeight + 'px Source Sans Pro';
+                    context.font = this.board[j][i].fontHeight + 'px Arial';
                     context.textAlign = 'center';
-                    context.fillStyle = 'black';
+                    context.fillStyle = this.board[j][i].fontColor;
                     context.textBaseline = 'middle';
                     let textX = x + Math.round(tileSize / 2);
                     let textY = y + Math.round(tileSize / 2) + 10;

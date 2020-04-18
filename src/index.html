@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -10,80 +12,128 @@
 </head>
 
 <body>
-    <nav>
-        <ul>
-            <li class="navbar-toggle">
-                <a id="menu-toggle">Toggle</a>
-            </li>
-            <li class="secondary">
-                <a class="highscores">Highscores</a>
-            </li>
-            <li class="secondary">
-                <a class="about">About</a>
-            </li>
-            <li class="secondary">
-                <a class="change-size">Change Board Size</a>
-            </li>
-            <li>
-                <a id="reset">Reset</a>
-            </li>
-            <li>
-                <span>Score: <b id="score"></b></span>
-            </li>
-            <li>
-                <a id="undo">Undo</a>
-            </li>
-        </ul>
-    </nav>
+    <section>
+        <nav>
+            <ul>
+                <li class="navbar-toggle">
+                    <a id="menu-toggle">Toggle</a>
+                </li>
+                <li class="secondary">
+                    <a class="highscores">Highscores</a>
+                </li>
+                <li class="secondary">
+                    <a class="about">About</a>
+                </li>
+                <li class="secondary">
+                    <a class="change-size">Change Board Size</a>
+                </li>
+                <li>
+                    <a id="reset">Reset</a>
+                </li>
+                <li>
+                    <span>Score: <b id="score"></b></span>
+                </li>
+                <li>
+                    <a id="undo">Undo</a>
+                </li>
+            </ul>
+        </nav>
 
-    <article id="warning">You need to have JavaScript enabled to play this game. Please enable it and reload the site or
-        use different browser.</article>
+    </section>
 
-    <div id="area-wrapper">
-        <canvas id="game-area"></canvas>
+    <section>
+        <p id="warning">You need to have JavaScript enabled to play this game. Please enable it and reload the site or
+            use different browser.</p>
 
-        <div class="overlay" id="game-over">
-            <div class="overlay-content">
-                <h1>Game Over</h1>
-                <div id="save-score">
-                    <p>Would you like to save your score?</p>
+        <div id="area-wrapper">
+            <canvas id="game-area"></canvas>
 
-                    <form>
-                        <label for="username">Your name:
-                            <input type="text" id="username" name="username">
-                        </label>
-                        <button type="submit">Save the Score</button>
-                    </form>
+            <div class="overlay" id="game-over">
+                <div class="overlay-content">
+                    <h1>Game Over</h1>
+                    <div id="save-score">
+                        <p>Would you like to save your score?</p>
 
-                    <button id="game-over-restart">Start Again</button>
+                        <form>
+                            <label for="username">Your name:
+                                <input type="text" id="username" name="username">
+                            </label>
+                            <button type="submit">Save the Score</button>
+                        </form>
+
+                        <button id="game-over-restart">Start Again</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overlay" id="victory">
+                <div class="overlay-content">
+                    <h1>You Have Achieved <span id="victory-value"></span></h1>
+                    <button id="continue">Continue</button>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="overlay" id="victory">
-            <div class="overlay-content">
-                <h1>You Have Achieved <span id="victory-value"></span></h1>
-                <button id="continue">Continue</button>
+    <section>
+        <div id="mobile-menu">
+            <ul>
+                <li>
+                    <a class="highscores">Highscores</a>
+                </li>
+                <li>
+                    <a class="about">About</a>
+                </li>
+                <li>
+                    <a class="change-size">Change Board Size</a>
+                </li>
+                <li id="close-menu">
+                    <button>Close Menu</button>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <div id="resize-modal" class="modal">
+            <div class="modal-content">
+                <h1>Choose the Board Size</h1>
+                <em>Changing the size of the board resets your game.</em>
+                <form id="size-form">
+                    <ul>
+                        <li>
+                            <label for="2">2</label>
+                            <input type="radio" name="size" id="2" value="2">
+                        </li>
+                        <li>
+                            <label for="4">4</label>
+                            <input type="radio" name="size" id="4" value="4">
+                        </li>
+                        <li>
+                            <label for="8">8</label>
+                            <input type="radio" name="size" id="8" value="8">
+                        </li>
+                        <li>
+                            <label for="16">16</label>
+                            <input type="radio" name="size" id="16" value="16">
+                        </li>
+                        <li>
+                            <label for="custom">32</label>
+                            <input type="radio" name="size" id="32" value="32">
+                        </li>
+                    </ul>
+                    <div class="form-buttons">
+                        <button id="resize-confirm" name="resize-confirm">
+                            Confirm Board Resizing
+                        </button>
+                        <button id="resize-cancel" name="resize-cancel">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-
-    <div id="mobile-menu">
-        <ul>
-            <li>
-                <a class="highscores">Highscores</a>
-            </li>
-            <li>
-                <a class="about">About</a>
-            </li>
-            <li>
-                <a class="change-size">Change Board Size</a>
-            </li>
-            <li id="close-menu">
-                <a>Close Menu</a>
-            </li>
-        </ul>
-    </div>
+    </section>
 
     <script type="module" src="./js/index.js"></script>
 </body>

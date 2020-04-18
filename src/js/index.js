@@ -1,6 +1,7 @@
 'use strict';
 
-import { Game } from './gamemodules/Game.mjs';
+import { Game } from './components/Game.mjs';
+import { setUpMenu } from './components/MenuAndModal.mjs';
 
 const game = new Game();
 
@@ -9,15 +10,9 @@ const game = new Game();
     let warning = document.getElementById('warning');
     warning.parentNode.removeChild(warning);
 
-    document.getElementById('menu-toggle').addEventListener('click', (event) => {
-        event.preventDefault();
-        document.getElementById('mobile-menu').style.transform = 'translateX(100%)';
-    });
+    let playArea = document.getElementById('game-area');
 
-    document.getElementById('close-menu').addEventListener('click', (event) => {
-        event.preventDefault();
-        document.getElementById('mobile-menu').style.transform = 'translateX(-100%)';
-    });
+    game.setUpGame(playArea);
 
-    game.setUpGame(document.getElementById('game-area'));
+    setUpMenu(game.size, playArea);
 })();

@@ -29,6 +29,10 @@ export class Game {
         playArea.addEventListener('gameOver', () => this.gameOver());
         playArea.addEventListener('victory', () => this.victory());
         playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value));
+        playArea.addEventListener('resize', () => {
+            this.setSize(event.detail.size);
+            this.resetGame();
+        });
 
         document.getElementById('reset').addEventListener('click', (event) => {
             this.resetGame();
