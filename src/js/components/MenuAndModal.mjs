@@ -1,4 +1,4 @@
-const defaultSizes = [2, 4, 8, 16];
+const defaultSizes = [2, 4, 8, 16, 32];
 
 /**
  * Wrapper for starting functions.

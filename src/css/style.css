@@ -14,7 +14,7 @@ body {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-div {
+div, article {
     border-radius: 15px;
 }
 
@@ -63,7 +63,7 @@ table {
 
 tr {
     display: flex;
-    justify-content: space-between;  
+    justify-content: space-between;
 }
 
 tr:first-of-type {
@@ -74,6 +74,7 @@ svg {
     height: 1.5rem;
     fill: #bbada0;
 }
+
 /* --------------------------- */
 
 /* Menu bar */
@@ -189,6 +190,7 @@ nav>ul>li>span {
 /* --------------------------- */
 
 /* Modals */
+
 .modal {
     display: flex;
     justify-content: center;
@@ -219,7 +221,7 @@ nav>ul>li>span {
     padding: 30px;
 }
 
-.modal-content em {
+.modal-content em, p {
     text-align: center;
     width: 90%;
 }

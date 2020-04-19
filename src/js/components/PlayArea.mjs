@@ -4,6 +4,7 @@ export class PlayArea {
     constructor(area) {
         this.chance = 0.1;
         this.area = area;
+        this.font = 'Tahoma';
 
         // Adds function for drawing rounded rectangles into PlayArea context
         this.context = area.getContext('2d');
@@ -143,7 +144,7 @@ export class PlayArea {
                         limiter = Math.log2(this.board[i][j].value) - Math.log2(8192);
                     }
 
-                    this.context.font = Math.round(256 / this.size) + 'px Arial';
+                    this.context.font = Math.round(tileSize / 3) + 'px ' + this.font;
                     this.context.textAlign = 'center';
                     this.context.textBaseline = 'middle';
                     this.context.fillStyle = this.board[i][j].fontColor;
