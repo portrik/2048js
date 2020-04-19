@@ -126,8 +126,13 @@ export class Game {
      * Also removes ovewrites save data with a new state.
      */
     resetGame() {
-        document.getElementById('victory').style.display = 'none';
-        document.getElementById('game-over').style.display = 'none';
+        document.querySelector('#victory .overlay-content').style.transform = 'scale(0)';
+        document.querySelector('#game-over .overlay-content').style.transform = 'scale(0)';
+
+        document.getElementById('victory').style.opacity = '0%';
+        document.getElementById('game-over').style.opacity = '0%';
+        document.getElementById('victory').style.visibility = 'hidden';
+        document.getElementById('game-over').style.visibility = 'hidden';
 
         this.score = 0;
         this.lost = false;
@@ -187,8 +192,9 @@ export class Game {
             }
 
             document.getElementById('can-submit-score').style.display = hasHigherScore;
-            document.getElementById('game-over').style.display = 'flex';
+            document.getElementById('game-over').style.visibility = 'visible';
             document.getElementById('game-over').style.opacity = '100%';
+            document.querySelector('#game-over .overlay-content').style.transform = 'scale(1)';
             this.storage.removeItem('board');
         }
     }
@@ -199,15 +205,16 @@ export class Game {
     victory() {
         if (!this.won) {
             document.getElementById('victory-value').innerText = Math.pow(2, (this.size * 3 - 1));
-            document.getElementById('victory').style.display = 'flex';
+            document.getElementById('victory').style.visibility = 'visible';
             document.getElementById('victory').style.opacity = '100%';
+            document.querySelector('#victory .overlay-content').style.transform = 'scale(1)';
             this.won = true;
         }
     }
 
     saveScore() {
         let newScore = {
-            name: document.forms["can-submit-score"][0].value,
+            name: document.forms["can-submit-score"][0].value.trim(),
             score: this.score,
         };
 
@@ -216,7 +223,7 @@ export class Game {
         }
 
         this.highscores[this.size].push(newScore);
-        this.highscores[this.size].sort((a, b) => (a.score > b.score) ? 1 : -1);
+        this.highscores[this.size].sort((a, b) => (a.score > b.score) ? -1 : 1);
 
         this.storage.storeItem('highscores', this.highscores);
 
@@ -225,7 +232,7 @@ export class Game {
     }
 
     updateHighscoresTable() {
-        let keys = Object.keys(this.highscores);
+        let keys = Object.keys(this.highscores).sort((a, b) => a > b ? -1 : 1);
         let targetElement = document.getElementById('scores-area');
         targetElement.innerHTML = '';
 

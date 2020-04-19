@@ -9,6 +9,7 @@ export function setUpMenu(initialSize, playArea) {
     sizeSetUp(initialSize, playArea);
     sideMenuSetUp();
     highscoresSetUp();
+    aboutSetUp();
 }
 
 /**
@@ -91,5 +92,30 @@ function highscoresSetUp() {
 
         highscoresContent.style.transform = 'scale(0)';
         highscoresModal.style.visibility = 'hidden';
+    });
+}
+
+/**
+ * Sets up listeners for about modal.
+ */
+function aboutSetUp() {
+    let aboutToggle = document.getElementsByClassName('about');
+    let aboutModal = document.getElementById('about-modal');
+    let aboutContent = document.querySelector('#about-modal .modal-content');
+
+    for (let i = 0; i < aboutToggle.length; ++i) {
+        aboutToggle[i].addEventListener('click', (event) => {
+            event.preventDefault();
+
+            aboutModal.style.visibility = 'visible';
+            aboutContent.style.transform = 'scale(1)';
+        });
+    }
+
+    document.getElementById('about-cancel').addEventListener('click', (event) => {
+        event.preventDefault();
+
+        aboutContent.style.transform = 'scale(0)';
+        aboutModal.style.visibility = 'hidden';
     });
 }

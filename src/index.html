@@ -7,7 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2048JS</title>
 
+    <!-- Google Font - Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
@@ -18,7 +27,10 @@
         <nav>
             <ul>
                 <li class="navbar-toggle">
-                    <a id="menu-toggle">Toggle</a>
+                    <svg id="menu-toggle" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z" />
+                        </svg>
                 </li>
                 <li class="secondary">
                     <a class="highscores">Highscores</a>
@@ -107,7 +119,7 @@
         <div id="resize-modal" class="modal">
             <div class="modal-content">
                 <h1>Choose the Board Size</h1>
-                <em>Changing the size of the board resets your game.</em>
+                <em>This will erase your current game.</em>
                 <form id="size-form">
                     <ul>
                         <li>
@@ -151,6 +163,17 @@
                     <h3>You have no highscores saved.</h3>
                 </div>
                 <button id="highscores-cancel" name="highscores-cancel">
+                    Close
+                </button>
+            </div>
+        </div>
+
+        <div id="about-modal" class="modal">
+            <div class="modal-content">
+                <h1>About</h1>
+                <a target="_blank" href="https://icons8.com/icons/set/menu">Menu icon</a> icon by <a target="_blank"
+                    href="https://icons8.com">Icons8</a>
+                <button id="about-cancel" name="about-cancel">
                     Close
                 </button>
             </div>

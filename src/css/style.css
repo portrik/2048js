@@ -50,11 +50,29 @@ label {
 }
 
 input[type="text"] {
-    margin: auto;
     background-color: #bbada0;
     color: #faf8ef;
     font-size: 1rem;
+    width: 50%;
     border: 0;
+}
+
+table {
+    width: 100%;
+}
+
+tr {
+    display: flex;
+    justify-content: space-between;  
+}
+
+tr:first-of-type {
+    border-bottom: 1px solid #bbada0;
+}
+
+svg {
+    height: 1.5rem;
+    fill: #bbada0;
 }
 /* --------------------------- */
 
@@ -68,7 +86,6 @@ nav {
 
 nav li {
     text-align: center;
-    margin: auto;
 }
 
 nav li a {
@@ -132,8 +149,10 @@ nav>ul>li>span {
     top: 0;
     left: 0;
     z-index: 2;
+    visibility: hidden;
     opacity: 0%;
-    transition: opacity 3s ease-in;
+    transition: all 1s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .overlay-content {
@@ -145,11 +164,12 @@ nav>ul>li>span {
     width: 60%;
     margin: auto;
     padding: 40px;
+    transform: scale(0);
 }
 
-#game-over {
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
+#can-submit-score div {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 #game-over form {
@@ -164,7 +184,6 @@ nav>ul>li>span {
 
 #victory {
     background-color: rgba(255, 252, 103, 0.5);
-    display: none;
 }
 
 /* --------------------------- */
@@ -220,6 +239,11 @@ nav>ul>li>span {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+}
+
+#scores-area {
+    max-height: 400px;
+    overflow: scroll;
 }
 
 /* --------------------------- */
