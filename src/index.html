@@ -20,165 +20,164 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
-<!-- Navbar Section -->
-
 <body>
-    <section>
-        <nav>
-            <ul>
-                <li class="navbar-toggle">
-                    <svg id="menu-toggle" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z" />
-                        </svg>
-                </li>
-                <li class="secondary">
-                    <a class="highscores">Highscores</a>
-                </li>
-                <li class="secondary">
-                    <a class="about">About</a>
-                </li>
-                <li class="secondary">
-                    <a class="change-size">Change Board Size</a>
-                </li>
-                <li>
-                    <a id="reset">Reset</a>
-                </li>
-                <li>
-                    <span>Score: <b id="score"></b></span>
-                </li>
-                <li>
-                    <a id="undo">Undo</a>
-                </li>
-            </ul>
-        </nav>
-
-    </section>
+    <!-- Navbar Section -->
+    <nav>
+        <ul>
+            <li class="navbar-toggle">
+                <svg id="menu-toggle" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z" />
+                </svg>
+            </li>
+            <li class="secondary">
+                <a class="highscores">Highscores</a>
+            </li>
+            <li class="secondary">
+                <a class="about">About</a>
+            </li>
+            <li class="secondary">
+                <a class="change-size">Change Board Size</a>
+            </li>
+            <li>
+                <a id="reset">Reset</a>
+            </li>
+            <li>
+                <span>Score: <b id="score"></b></span>
+            </li>
+            <li>
+                <a id="undo">Undo</a>
+            </li>
+        </ul>
+    </nav>
 
     <!-- Game Section -->
+    <p id="warning">You need to have JavaScript enabled to play this game. Please enable it and reload the site or
+        use different browser.</p>
 
-    <section>
-        <p id="warning">You need to have JavaScript enabled to play this game. Please enable it and reload the site or
-            use different browser.</p>
+    <div id="area-wrapper">
+        <canvas id="game-area"></canvas>
 
-        <div id="area-wrapper">
-            <canvas id="game-area"></canvas>
+        <div class="overlay" id="game-over">
+            <div class="overlay-content">
+                <h1>Game Over</h1>
+                <h3>Press Reset to play again.</h3>
+                <div id="save-score">
+                    <p>Would you like to save your score?</p>
 
-            <div class="overlay" id="game-over">
-                <div class="overlay-content">
-                    <h1>Game Over</h1>
-                    <h3>Press Reset to play again.</h3>
-                    <div id="save-score">
-                        <p>Would you like to save your score?</p>
-
-                        <form id="can-submit-score">
-                            <div>
-                                <label for="username">Your name: </label>
-                                <input type="text" id="username" name="username">
-                            </div>
-                            <button type="submit">Save the Score</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="overlay" id="victory">
-                <div class="overlay-content">
-                    <h1>Congratulations</h1>
-                    <h3>You Have Achieved <span id="victory-value"></span></h3>
-                    <button id="continue">Continue Playing</button>
+                    <form id="can-submit-score">
+                        <div>
+                            <label for="username">Your name: </label>
+                            <input type="text" id="username" name="username" maxlength="20" required placeholder="Player">
+                        </div>
+                        <button type="submit">Save the Score</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
+
+        <div class="overlay" id="victory">
+            <div class="overlay-content">
+                <h1>Congratulations</h1>
+                <h3>You Have Achieved <span id="victory-value"></span></h3>
+                <button id="continue">Continue Playing</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Mobile Menu -->
-
-    <section>
-        <div id="mobile-menu">
-            <ul>
-                <li>
-                    <a class="highscores">Highscores</a>
-                </li>
-                <li>
-                    <a class="about">About</a>
-                </li>
-                <li>
-                    <a class="change-size">Change Board Size</a>
-                </li>
-                <li id="close-menu">
-                    <button>Close Menu</button>
-                </li>
-            </ul>
-        </div>
-    </section>
+    <div id="mobile-menu">
+        <ul>
+            <li>
+                <a class="highscores">Highscores</a>
+            </li>
+            <li>
+                <a class="about">About</a>
+            </li>
+            <li>
+                <a class="change-size">Change Board Size</a>
+            </li>
+            <li id="close-menu">
+                <button>Close Menu</button>
+            </li>
+        </ul>
+    </div>
 
     <!-- Modals -->
-
-    <section>
-        <div id="resize-modal" class="modal">
-            <div class="modal-content">
-                <h1>Choose the Board Size</h1>
-                <em>This will erase your current game.</em>
-                <form id="size-form">
-                    <ul>
-                        <li>
-                            <input type="radio" name="size" id="2" value="2">
-                            <label for="2">2</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="size" id="4" value="4">
-                            <label for="4">4</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="size" id="8" value="8">
-                            <label for="8">8</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="size" id="16" value="16">
-                            <label for="16">16</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="size" id="32" value="32">
-                            <label for="32">32</label>
-                        </li>
-                    </ul>
-                    <div class="form-buttons">
-                        <button id="resize-confirm" name="resize-confirm">
-                            Confirm Board Resizing
-                        </button>
-                        <button id="resize-cancel" name="resize-cancel">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="highscores-modal" class="modal">
-            <div class="modal-content">
-                <h1>Highscores</h1>
-
-                <div id="scores-area">
-                    <h3>You have no highscores saved.</h3>
+    <div id="resize-modal" class="modal">
+        <div class="modal-content">
+            <h1>Choose the Board Size</h1>
+            <em>This will erase your current game.</em>
+            <form id="size-form">
+                <ul>
+                    <li>
+                        <input type="radio" name="size" id="2" value="2">
+                        <label for="2">2</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="size" id="4" value="4" checked>
+                        <label for="4">4</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="size" id="8" value="8">
+                        <label for="8">8</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="size" id="16" value="16">
+                        <label for="16">16</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="size" id="32" value="32">
+                        <label for="32">32</label>
+                    </li>
+                </ul>
+                <div class="form-buttons">
+                    <button id="resize-confirm" name="resize-confirm">
+                        Confirm Board Resizing
+                    </button>
+                    <button id="resize-cancel" name="resize-cancel">
+                        Cancel
+                    </button>
                 </div>
-                <button id="highscores-cancel" name="highscores-cancel">
-                    Close
-                </button>
-            </div>
+            </form>
         </div>
+    </div>
 
-        <div id="about-modal" class="modal">
-            <div class="modal-content">
-                <h1>About</h1>
-                <a target="_blank" href="https://icons8.com/icons/set/menu">Menu icon</a> icon by <a target="_blank"
-                    href="https://icons8.com">Icons8</a>
-                <button id="about-cancel" name="about-cancel">
-                    Close
-                </button>
+    <div id="highscores-modal" class="modal">
+        <div class="modal-content">
+            <h1>Highscores</h1>
+
+            <div id="scores-area">
+                <h3>You have no highscores saved.</h3>
             </div>
+            <button id="highscores-cancel" name="highscores-cancel">
+                Close
+            </button>
         </div>
-    </section>
+    </div>
+
+    <div id="about-modal" class="modal">
+        <article class="modal-content">
+            <h1>About 2048JS</h1>
+            <p>
+                This game is reimagination of the classic 2048 using pure JavaScript and HTML Canvas element.
+                It was created as a semestral project at FEE CUT.
+            </p>
+            <p>
+                Arrow keys, WASD and touchscreens are all supported as input methods.
+            </p>
+            <p>
+                If you would like to know more about the game or are interested in the source code, visit <a
+                    target="_blank" href="https://github.com/tehSIRius/2048js">the Github repo</a>.
+            </p>
+            <p>
+                The <a target="_blank" href="https://icons8.com/icons/set/menu">mobile menu icon</a> was created by
+                <a target="_blank" href="https://icons8.com">Icons8</a>.
+            </p>
+            <button id="about-cancel" name="about-cancel">
+                Close
+            </button>
+        </div>
+    </div>
 
     <script type="module" src="./js/index.js"></script>
 </body>

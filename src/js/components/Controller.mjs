@@ -24,7 +24,7 @@ export class Controller {
         this.touchY = 0;
 
         // Tolerance used for swipe directions
-        this.tolerance = 50;
+        this.tolerance = 30;
 
         this.targetElement = targetElement;
         this.enableController();

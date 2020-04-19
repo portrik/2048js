@@ -174,7 +174,7 @@ export class Game {
      */
     gameOver() {
         if (!this.lost) {
-            let hasHigherScore = 'hidden';
+            let hasHigherScore = 'flex';
             let currentHighscores = [];
             this.lost = true;
 
@@ -184,11 +184,8 @@ export class Game {
 
             currentHighscores = this.highscores;
 
-            if (currentHighscores.length < 10) {
-                hasHigherScore = 'flex';
-            }
-            else if (currentHighscores[currentHighscores.length - 1] < this.score) {
-                hasHigherScore = 'flex';
+            if (currentHighscores > 9 && currentHighscores[currentHighscores.length - 1] > this.score) {
+                hasHigherScore = 'none';
             }
 
             document.getElementById('can-submit-score').style.display = hasHigherScore;
@@ -212,9 +209,19 @@ export class Game {
         }
     }
 
+    /**
+     * Saves the highscore and updates the highscore table.
+     * Trims the username to 20 characters if it is longer.
+     */
     saveScore() {
+        let username = document.forms["can-submit-score"][0].value.trim();
+
+        if (username.length > 20) {
+            username = username.substring(0, 19);
+        }
+
         let newScore = {
-            name: document.forms["can-submit-score"][0].value.trim(),
+            name: username,
             score: this.score,
         };
 
@@ -231,6 +238,9 @@ export class Game {
         this.resetGame();
     }
 
+    /**
+     * Renders highscores table.
+     */
     updateHighscoresTable() {
         let keys = Object.keys(this.highscores).sort((a, b) => a > b ? -1 : 1);
         let targetElement = document.getElementById('scores-area');
