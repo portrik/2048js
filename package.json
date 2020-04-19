@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "css": "cp -r src/css dist && npx csso ./dist/css/style.css --output ./dist/css/style.css",
+    "favicons": "cp -r src/favicons/* dist",
     "html": "cp src/*.html dist",
-    "static": "npm run css && npm run html",
+    "static": "npm run css && npm run html && npm run favicons",
     "build": "rimraf dist && webpack --mode production && npm run static",
     "start": "npx http-server ./src -o -c-1"
   },
