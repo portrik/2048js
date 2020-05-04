@@ -1,5 +1,5 @@
-import { PlayArea } from './PlayArea.mjs';
 import { Controller } from './Controller.mjs';
+import { PlayArea } from './PlayArea.mjs';
 import { Storage } from './Storage.mjs';
 
 export class Game {
