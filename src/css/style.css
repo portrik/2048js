@@ -1,5 +1,10 @@
 /* Site-wide styles */
 
+@font-face {
+    font-family: 'Source Sans Pro', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900');
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -75,6 +80,31 @@ svg {
     fill: #bbada0;
 }
 
+label {
+    border: 2px solid #bbada0;
+    display: flex;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+label:hover {
+    background-color: #f5e0ce;
+}
+
+:checked + label {
+    background-color: #bbada0;
+    color: #faf8ef;
+}
+
+input[type="radio"] {
+    display: block;
+    visibility: hidden;
+    margin: 25px auto 10px;
+}
+
 /* --------------------------- */
 
 /* Menu bar */
@@ -91,7 +121,7 @@ nav li {
 
 nav li a {
     cursor: pointer;
-    text-emphasis: bold;
+    font-weight: bold;
 }
 
 nav>ul>li>span {
