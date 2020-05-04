@@ -252,8 +252,12 @@ export class Game {
             heading.innerText = 'Scores for Board Size ' + key;
             wrapper.appendChild(heading);
 
+            let tableWrapper = document.createElement('div');
+            tableWrapper.className = 'table-wrapper';
+            wrapper.appendChild(tableWrapper);
+
             let table = document.createElement('table');
-            wrapper.appendChild(table);
+            tableWrapper.appendChild(table);
 
             let header = document.createElement('tr');
             table.appendChild(header);

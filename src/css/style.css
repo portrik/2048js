@@ -63,7 +63,7 @@ input[type="text"] {
 }
 
 table {
-    width: 100%;
+    width: 50vw;
 }
 
 tr {
@@ -155,7 +155,7 @@ nav>ul>li>span {
 }
 
 #mobile-menu ul {
-    height: 90%;
+    height: 90vh;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -245,10 +245,11 @@ nav>ul>li>span {
     flex-flow: column;
     margin: auto;
     min-width: 300px;
+    width: 70vw;
     background-color: #faf8ef;
     transform: scale(0);
     transition: all 0.5s ease-in-out;
-    padding: 30px;
+    padding: 15px;
 }
 
 .modal-content em, p {
@@ -267,6 +268,12 @@ nav>ul>li>span {
     align-items: center;
 }
 
+.table-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .form-buttons {
     display: flex;
     justify-content: space-between;
@@ -274,7 +281,7 @@ nav>ul>li>span {
 }
 
 #scores-area {
-    max-height: 400px;
+    max-height: 70vh;
     overflow: scroll;
 }
 
