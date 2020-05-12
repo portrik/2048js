@@ -1,7 +1,8 @@
-const defaultSizes = [2, 4, 8, 16, 32];
+const boardSizes = [2, 4, 8, 16, 32];
 
 /**
  * Wrapper for starting functions.
+ * 
  * @param initialSize - Size of the board
  * @param playArea - HTML Element with canvas
  */
@@ -15,6 +16,7 @@ export function setUpMenu(initialSize, playArea) {
 /**
  * Sets up listeners for the resizing modal.
  * Also dispatches event for Game in case of board resizing.
+ * 
  * @param initialSize - Size of the board
  * @param playArea - HTML Element with Canvas
  */
@@ -51,7 +53,7 @@ function sizeSetUp(initialSize, playArea) {
     });
 
     // Set initial size to the resize form
-    document.forms["size-form"][defaultSizes.indexOf(initialSize)].checked = true;
+    document.forms["size-form"][boardSizes.indexOf(initialSize)].checked = true;
 }
 
 /**
