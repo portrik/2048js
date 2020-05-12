@@ -6,8 +6,8 @@ export class PlayArea {
         this.area = area;
         this.font = 'Verdana';
 
-        // Adds function for drawing rounded rectangles into PlayArea context
         this.context = area.getContext('2d');
+        // Adds function for drawing rounded rectangles into PlayArea context
         this.context.drawRoundedRect = drawRoundedRect;
 
         this.resizeArea();
@@ -45,7 +45,8 @@ export class PlayArea {
     }
 
     /**
-     * Sets the board up with new size
+     * Sets up a clean game board
+     * 
      * @param {int} size - Board Size
      */
     setUp(size) {
@@ -57,14 +58,17 @@ export class PlayArea {
             this.board[i].fill(null);
         }
 
+        // Spawns two initial tiles
         this.checkBoard(true);
         this.checkBoard(true);
+
         this.drawBoard();
     }
 
     /**
-     * Changes the board to the saved one
-     * @param board - Saved board from localStorage
+     * Changes the board to the saved one.
+     * 
+     * @param board - Board loaded from localStorage
      */
     setBoard(board) {
         this.size = board.length;
@@ -99,6 +103,7 @@ export class PlayArea {
 
     /**
      * Moves Tiles on the board, checks for availavble spaces and redraws canvas.
+     * 
      * @param direction - Direction indicated by Controller.
      */
     moveTiles(direction) {
@@ -117,7 +122,7 @@ export class PlayArea {
         }
 
         this.applyMovedArray(tmpArray, direction); // Returns array to normal position
-        this.checkBoard(canSpawn);
+        this.checkBoard(canSpawn); // Spawns a new tile if an empty space is available
         this.drawBoard();
     }
 
@@ -138,11 +143,6 @@ export class PlayArea {
 
                 if (this.board[i][j]) {
                     this.context.drawRoundedRect(x, y, tileSize, tileSize, this.board[i][j].color, this.size);
-                    let limiter = 0;
-
-                    if (this.board[i][j] > 8192) {
-                        limiter = Math.log2(this.board[i][j].value) - Math.log2(8192);
-                    }
 
                     this.context.font = `${Math.round(tileSize / 3)}px "${this.font}"`;
                     this.context.textAlign = 'center';
@@ -150,7 +150,7 @@ export class PlayArea {
                     this.context.fillStyle = this.board[i][j].fontColor;
                     let textX = x + Math.round(tileSize / 2);
 
-                    // Text does not feel centered without the 5 % of tileSize included
+                    // Text feels centered with the 5 % of tile width added
                     let textY = y + Math.round(tileSize / 2) + Math.round(tileSize * 0.05);
 
                     this.context.fillText(this.board[i][j].value, textX, textY);
@@ -176,7 +176,8 @@ export class PlayArea {
 
     /**
      * Spawns a new Tile on a random available space.
-     * Has a chance to spawn a tile with value of 4.
+     * Has a small chance to spawn a tile with value of 4.
+     * 
      * @param availableSpaces - Array of available positions for new Tile
      */
     spawnTile(availableSpaces) {
@@ -197,6 +198,7 @@ export class PlayArea {
     /**
      * Checks if it is still possible to continue playing.
      * Spawns a new Tile if enabled and available spaces exist.
+     * 
      * @param canSpawn - Spawn enabler
      */
     checkBoard(canSpawn) {
@@ -210,6 +212,7 @@ export class PlayArea {
             }
         }
 
+        // If there are no available spaces, the game checks for a game over.
         if (availableSpaces.length > 0 && canSpawn) {
             this.spawnTile(availableSpaces);
         }
@@ -239,7 +242,8 @@ export class PlayArea {
     }
 
     /**
-     * Compares two arrays
+     * Compares two arrays of objects.
+     * 
      * @param first 
      * @param second 
      */
@@ -257,6 +261,8 @@ export class PlayArea {
 
     /**
      * Moves lines of array lines to the side and merges possible Tiles.
+     * [*, *, _, *] -> [**, *, _, _]
+     * 
      * @param array - Array of arrays
      */
     cleanUpLine(array) {
@@ -289,6 +295,8 @@ export class PlayArea {
 
     /**
      * Shifts items in rows to a side and pads their end with null.
+     * [*, _, *, _] -> [*, *, _, _]
+     * 
      * @param array - Array of arrays
      */
     shiftLine(array) {
@@ -302,7 +310,9 @@ export class PlayArea {
     }
 
     /**
-     * Returns an array of arrays to be cleaned up in specified direction.
+     * Returns an array of arrays compatible with cleanupLine.
+     * Each array is converted in a way that index 0 is the desired direction the items will move to.
+     * 
      * @param direction - Direction of movement
      */
     getMovableArray(direction) {
@@ -310,12 +320,15 @@ export class PlayArea {
 
         switch (direction) {
             case 'left':
+                // Left has no mutations, the rows are used as they are
                 this.board.forEach(row => result.push(row));
                 break;
             case 'right':
+                // Right is just like left but reversed
                 this.board.forEach(row => result.push(row.reverse()));
                 break;
             case 'up':
+                // Up takes the columns from top to bottom
                 for (let i = 0; i < this.size; ++i) {
                     result[i] = [];
 
@@ -325,6 +338,7 @@ export class PlayArea {
                 }
                 break;
             case 'down':
+                // Down takes the columns from bottom to top
                 for (let i = 0; i < this.size; ++i) {
                     result[i] = [];
 
@@ -339,23 +353,27 @@ export class PlayArea {
     }
 
     /**
-     * Applies moved array to board.
+     * Takes the moved array, converts it and applies it back on the board.
+     * 
      * @param newArray - Array of arrays
      * @param direction - Direction of movement
      */
     applyMovedArray(newArray, direction) {
         switch (direction) {
             case 'left':
+                // Left takes the array as is
                 for (let i = 0; i < newArray.length; ++i) {
                     this.board[i] = newArray[i];
                 }
                 break;
             case 'right':
+                // Right is just like left but reversed
                 for (let i = 0; i < newArray.length; ++i) {
                     this.board[i] = newArray[i].reverse();
                 }
                 break;
             case 'up':
+                // Up takes the array and applies them back to columns
                 for (let i = 0; i < newArray.length; ++i) {
                     let tmpArray = [];
 
@@ -367,6 +385,7 @@ export class PlayArea {
                 }
                 break;
             case 'down':
+                // Down takes the array and applies it back to columns
                 for (let i = 0; i < newArray.length; ++i) {
                     let tmpArray = [];
 

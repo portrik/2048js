@@ -24,7 +24,8 @@ export class Storage {
     }
 
     /**
-     * Saves an item in the local storage
+     * Saves an item in the local storage.
+     * 
      * @param name - Name of the item
      * @param value - Value of the item
      */
@@ -35,7 +36,8 @@ export class Storage {
     }
 
     /**
-     * Loads an item from the local storage
+     * Loads an item from the local storage.
+     * 
      * @param name - Name of the item
      */
     loadItem(name) {
@@ -51,7 +53,8 @@ export class Storage {
     }
 
     /**
-     * Removes an item from the local storage
+     * Removes an item from the local storage.
+     * 
      * @param name - Name of the item
      */
     removeItem(name) {

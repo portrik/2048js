@@ -16,7 +16,8 @@ export class Game {
 
     /**
      * Loads default values and initializes PlayArea, Controller and event listeners.
-     * If localStorage save exists, default values are overwritten.
+     * If localStorage save exists, default values are overwritten by the saved data.
+     * 
      * @param playArea - HTML Canvas element
      */
     setUpGame(playArea) {
@@ -30,6 +31,7 @@ export class Game {
         playArea.addEventListener('gameOver', () => this.gameOver());
         playArea.addEventListener('victory', () => this.victory());
         playArea.addEventListener('scoreUp', (event) => this.updateScore(event.detail.value));
+
         playArea.addEventListener('resize', () => {
             this.setSize(event.detail.size);
             this.resetGame();
@@ -58,21 +60,22 @@ export class Game {
     }
 
     /**
-     * Hooks Controller on the PlayArea.
+     * Binds Controller on the PlayArea.
+     * 
      * @param playArea - HTML Canvas element
      */
     setUpController(playArea) {
         this.controller = new Controller(playArea);
 
-        playArea.addEventListener('moveGameBoard', (event) => { 
+        playArea.addEventListener('moveGameBoard', (event) => {
             if (!this.lost) {
-                this.playArea.moveTiles(event.detail.direction); 
+                this.playArea.moveTiles(event.detail.direction);
             }
         });
     }
 
     /**
-     * Loads saved data if localStorage is working and data exist.
+     * Loads saved data if localStorage is working and game data is present.
      */
     loadLocalData() {
         let localData = this.storage.loadItem('board');
@@ -97,7 +100,9 @@ export class Game {
 
     /**
      * Updates the score with the value from a merged Tile.
-     * @param value - Value of the merged Tile.
+     * Saves the game state to localStorage 2 seconds after the last move.
+     * 
+     * @param value - New value of the merged Tile.
      */
     updateScore(value) {
         this.lastValue = value;
@@ -123,7 +128,7 @@ export class Game {
 
     /**
      * Resets the game to the default state.
-     * Also removes ovewrites save data with a new state.
+     * Also removes and ovewrites save data with a new state.
      */
     resetGame() {
         document.querySelector('#victory .overlay-content').style.transform = 'scale(0)';
@@ -152,6 +157,7 @@ export class Game {
 
     /**
      * Resize the board to a new size.
+     * 
      * @param size - New size of the board.
      */
     setSize(size) {
@@ -160,17 +166,19 @@ export class Game {
     }
 
     /**
-     * Reverts to a previous state.
+     * Reverts to a previous move.
      */
     undoLastMove() {
         this.score -= this.lastValue;
         this.lastValue = 0;
         this.playArea.undoLastMove();
+
         document.getElementById('score').innerText = this.score;
     }
 
     /**
-     * Ends the game.
+     * Resets the highscore and ends the game.
+     * Displays game over overlay and if the highscore is in TOP 10, shows option to save it.
      */
     gameOver() {
         if (!this.lost) {
@@ -192,26 +200,29 @@ export class Game {
             document.getElementById('game-over').style.visibility = 'visible';
             document.getElementById('game-over').style.opacity = '100%';
             document.querySelector('#game-over .overlay-content').style.transform = 'scale(1)';
+
             this.storage.removeItem('board');
         }
     }
 
     /**
-     * Announces victory and opens modal with the option to play on.
+     * Announces victory and opens modal with the option to continue playing.
      */
     victory() {
         if (!this.won) {
             document.getElementById('victory-value').innerText = Math.pow(2, (this.size * 3 - 1));
+
             document.getElementById('victory').style.visibility = 'visible';
             document.getElementById('victory').style.opacity = '100%';
             document.querySelector('#victory .overlay-content').style.transform = 'scale(1)';
+
             this.won = true;
         }
     }
 
     /**
      * Saves the highscore and updates the highscore table.
-     * Trims the username to 20 characters if it is longer.
+     * Clips the username to 20 characters if it is longer.
      */
     saveScore() {
         let username = document.forms["can-submit-score"][0].value.trim();
@@ -239,15 +250,17 @@ export class Game {
     }
 
     /**
-     * Renders highscores table.
+     * Renders highscores table from memory.
      */
     updateHighscoresTable() {
         let keys = Object.keys(this.highscores).sort((a, b) => a > b ? -1 : 1);
         let targetElement = document.getElementById('scores-area');
         targetElement.innerHTML = '';
 
+        // Creates table for each board size that has highscores
         keys.forEach(key => {
             let wrapper = document.createElement('div');
+
             let heading = document.createElement('h3');
             heading.innerText = 'Scores for Board Size ' + key;
             wrapper.appendChild(heading);
@@ -267,9 +280,10 @@ export class Game {
             header.appendChild(player);
 
             let score = document.createElement('th');
-            score.innerText = 'Score';            
+            score.innerText = 'Score';
             header.appendChild(score);
 
+            // Creates entry for each score
             this.highscores[key].forEach((player) => {
                 let newRow = document.createElement('tr');
 

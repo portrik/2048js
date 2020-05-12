@@ -25,7 +25,7 @@ export class Tile {
 
     /**
      * Updates the value, sets a new color and checks for font color.
-     * Returns new value for checking of victory.
+     * Returns the new value.
      */
     merge() {
         this.value *= 2;
